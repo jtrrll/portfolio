@@ -1,2 +1,27 @@
-# portfolio
-jtrrll's personal portfolio
+# web-server
+
+<!-- markdownlint-disable MD013 -->
+![GitHub Actions CI Status](https://img.shields.io/github/actions/workflow/status/jtrrll/portfolio/ci.yaml?branch=main&logo=github&label=CI)
+![License](https://img.shields.io/github/license/jtrrll/portfolio?label=License)
+<!-- markdownlint-enable MD013 -->
+
+jtrrll's personal portfolio.
+
+## Usage
+
+1. [Install Nix](https://zero-to-nix.com/start/install)
+2. Run the following to start the `database` service:
+
+   <!-- markdownlint-disable MD013 -->
+   ```sh
+   nix run .#database --port <PORT>
+   ```
+   <!-- markdownlint-enable MD013 -->
+
+3. Run the following to start the `portfolio` service:
+
+   <!-- markdownlint-disable MD013 -->
+   ```sh
+   nix run .#portfolio --port <PORT>
+   ```
+   <!-- markdownlint-enable MD013 -->
