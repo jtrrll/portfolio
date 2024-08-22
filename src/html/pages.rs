@@ -1,0 +1,1 @@
+//! Defines full HTML pages.
