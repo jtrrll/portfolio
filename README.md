@@ -10,18 +10,18 @@ jtrrll's personal portfolio.
 ## Usage
 
 1. [Install Nix](https://zero-to-nix.com/start/install)
-2. Run the following to start the `database` service:
+2. Run the following to start all services:
 
    <!-- markdownlint-disable MD013 -->
    ```sh
-   nix run .#database --port <PORT>
+   devenv up
    ```
    <!-- markdownlint-enable MD013 -->
 
-3. Run the following to start the `portfolio` service:
+3. Run the following to start the `portfolio` application:
 
    <!-- markdownlint-disable MD013 -->
    ```sh
-   nix run .#portfolio --port <PORT>
+   nix run .#portfolio
    ```
    <!-- markdownlint-enable MD013 -->
