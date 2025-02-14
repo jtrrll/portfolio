@@ -1,0 +1,40 @@
+schema = 4
+vendorModulesTxt = "# github.com/davecgh/go-spew v1.1.1\n## explicit\ngithub.com/davecgh/go-spew/spew\n# github.com/fatih/color v1.18.0\n## explicit; go 1.17\ngithub.com/fatih/color\n# github.com/kr/pretty v0.3.1\n## explicit; go 1.12\n# github.com/mattn/go-colorable v0.1.13\n## explicit; go 1.15\ngithub.com/mattn/go-colorable\n# github.com/mattn/go-isatty v0.0.20\n## explicit; go 1.15\ngithub.com/mattn/go-isatty\n# github.com/pmezard/go-difflib v1.0.0\n## explicit\ngithub.com/pmezard/go-difflib/difflib\n# github.com/rogpeppe/go-internal v1.12.0\n## explicit; go 1.20\n# github.com/spf13/pflag v1.0.5\n## explicit; go 1.12\ngithub.com/spf13/pflag\n# github.com/stretchr/testify v1.10.0\n## explicit; go 1.17\ngithub.com/stretchr/testify/assert\ngithub.com/stretchr/testify/assert/yaml\n# golang.org/x/sys v0.28.0\n## explicit; go 1.18\ngolang.org/x/sys/unix\ngolang.org/x/sys/windows\n# gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c\n## explicit; go 1.11\n# gopkg.in/yaml.v3 v3.0.1\n## explicit\ngopkg.in/yaml.v3\n"
+
+[mod]
+  [mod."github.com/davecgh/go-spew"]
+    version = "v1.1.1"
+    hash = "sha256-nhzSUrE1fCkN0+RL04N4h8jWmRFPPPWbCuDc7Ss0akI="
+  [mod."github.com/fatih/color"]
+    version = "v1.18.0"
+    hash = "sha256-pP5y72FSbi4j/BjyVq/XbAOFjzNjMxZt2R/lFFxGWvY="
+  [mod."github.com/kr/pretty"]
+    version = "v0.3.1"
+    hash = "sha256-DlER7XM+xiaLjvebcIPiB12oVNjyZHuJHoRGITzzpKU="
+  [mod."github.com/mattn/go-colorable"]
+    version = "v0.1.13"
+    hash = "sha256-qb3Qbo0CELGRIzvw7NVM1g/aayaz4Tguppk9MD2/OI8="
+  [mod."github.com/mattn/go-isatty"]
+    version = "v0.0.20"
+    hash = "sha256-qhw9hWtU5wnyFyuMbKx+7RB8ckQaFQ8D+8GKPkN3HHQ="
+  [mod."github.com/pmezard/go-difflib"]
+    version = "v1.0.0"
+    hash = "sha256-/FtmHnaGjdvEIKAJtrUfEhV7EVo5A/eYrtdnUkuxLDA="
+  [mod."github.com/rogpeppe/go-internal"]
+    version = "v1.12.0"
+    hash = "sha256-qvDNCe3l84/LgrA8X4O15e1FeDcazyX91m9LmXGXX6M="
+  [mod."github.com/spf13/pflag"]
+    version = "v1.0.5"
+    hash = "sha256-w9LLYzxxP74WHT4ouBspH/iQZXjuAh2WQCHsuvyEjAw="
+  [mod."github.com/stretchr/testify"]
+    version = "v1.10.0"
+    hash = "sha256-fJ4gnPr0vnrOhjQYQwJ3ARDKPsOtA7d4olQmQWR+wpI="
+  [mod."golang.org/x/sys"]
+    version = "v0.28.0"
+    hash = "sha256-kzSlDo5FKsQU9cLefIt2dueGUfz9XuEW+mGSGlPATGc="
+  [mod."gopkg.in/check.v1"]
+    version = "v1.0.0-20201130134442-10cb98267c6c"
+    hash = "sha256-VlIpM2r/OD+kkyItn6vW35dyc0rtkJufA93rjFyzncs="
+  [mod."gopkg.in/yaml.v3"]
+    version = "v3.0.1"
+    hash = "sha256-FqL9TKYJ0XkNwJFnq9j0VvJ5ZUU1RvH/52h/f5bkYAU="
