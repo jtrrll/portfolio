@@ -97,9 +97,13 @@
             description = "Runs all benchmark tests.";
             exec = "${pkgs.writeShellApplication {
               name = "build";
-              runtimeInputs = [goPkg];
+              runtimeInputs = [
+                goPkg
+                inputs.templ.packages.${system}.templ
+              ];
               text = ''
                 cd "$GO_ROOT" && \
+                templ generate -log-level error
                 go test ./... -bench=.
               '';
             }}/bin/bench";
@@ -142,7 +146,7 @@
                 snekcheck --fix "$PROJECT_ROOT" && \
                 nix fmt "$PROJECT_ROOT/flake.nix" "$NIX_ROOT" -- --quiet && \
                 (cd "$GO_ROOT" && \
-                templ generate
+                templ generate -log-level error
                 go mod tidy && go fmt ./... && go vet ./... && \
                 golangci-lint run ./...)
               '';
@@ -166,9 +170,13 @@
             description = "Runs all unit tests.";
             exec = "${pkgs.writeShellApplication {
               name = "unit";
-              runtimeInputs = [goPkg];
+              runtimeInputs = [
+                goPkg
+                inputs.templ.packages.${system}.templ
+              ];
               text = ''
                 cd "$GO_ROOT" && \
+                templ generate -log-level error && \
                 go test --cover ./...
               '';
             }}/bin/unit";
