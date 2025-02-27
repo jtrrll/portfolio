@@ -1,0 +1,78 @@
+// A collection of templ components.
+package components
+
+// A site-wide layout.
+templ Layout(title string, description string) {
+  <!doctype html>
+  <html lang="en">
+    @head(title, description)
+    <body>
+      @navbar(
+        navLink{text: "home", href: templ.URL("/")},
+        navLink{text: "projects", href: templ.URL("/projects")},
+        navLink{text: "music", href: templ.URL("/music")},
+        navLink{text: "art", href: templ.URL("/art")},
+      )
+      {children...}
+      @footer()
+    </body>
+  </html>
+}
+
+// An HTML head component.
+// TODO: Figure out which fonts to use.
+templ head(title string, description string) {
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="static/styles.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hack-font/3.3.0/web/hack-subset.min.css">
+    <link rel="stylesheet" href="https://kujitegemea.github.io/language-colors/language-colors.css"/>
+    <link rel="icon" href="static/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{title}</title>
+    <meta name="description" content={description}/>
+  </head>
+}
+
+// A navigation link.
+type navLink struct {
+  text string
+  href templ.SafeURL
+}
+
+// A site-wide navigation bar.
+// TODO: Hamburger menu, styling.
+templ navbar(links ...struct {text string; href templ.SafeURL}) {
+  <div id="navbar">
+    <div>
+      <a href="/">
+        <p id="logo">jtrrll</p>
+      </a>
+      <nav id="nav-links">
+        <ul>
+        for _, link := range links {
+          <li>
+            <a href={link.href}>
+              {link.text}
+            </a>
+          </li>
+        }
+        </ul>
+      </nav>
+    </div>
+    <div id="loading-progress-bar">
+      <div/>
+    </div>
+  </div>
+}
+
+// A site-wide footer.
+// TODO: Styling.
+templ footer() {
+  <div id="footer">
+    <p>
+      Jackson Terrill
+    </p>
+  </div>
+}

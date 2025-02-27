@@ -22,6 +22,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:jtrrll/snekcheck";
     };
+    templ = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:a-h/templ";
+    };
   };
 
   outputs = {flake-parts, ...} @ inputs:

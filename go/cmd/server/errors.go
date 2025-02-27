@@ -1,22 +1,11 @@
 package main
 
+import "portfolio/internal/cli"
+
 // Common errors.
 var (
-	errFailedToStart = Error{Code: 1, Message: "failed to start server"}
+	errFailedToSetupOtel      = cli.CommandLineError{StatusCode: 1, Message: "failed to set up OpenTelemetry"}
+	errFailedToShutdownOtel   = cli.CommandLineError{StatusCode: 2, Message: "failed to shut down OpenTelemetry"}
+	errFailedToStartServer    = cli.CommandLineError{StatusCode: 3, Message: "failed to start server"}
+	errFailedToShutdownServer = cli.CommandLineError{StatusCode: 4, Message: "failed to shut down server"}
 )
-
-// A command-line error.
-type Error struct {
-	Message string
-	Code    uint8
-}
-
-// Returns the error's status code.
-func (err Error) ExitCode() uint8 {
-	return err.Code
-}
-
-// Returns the error's message.
-func (err Error) Error() string {
-	return err.Message
-}

@@ -51,6 +51,10 @@
           nix.enable = true;
         };
 
+        packages = [
+          inputs.templ.packages.${system}.templ
+        ];
+
         pre-commit = {
           default_stages = ["pre-push"];
           hooks = {
@@ -131,31 +135,32 @@
               runtimeInputs = [
                 goPkg
                 inputs.snekcheck.packages.${system}.snekcheck
+                inputs.templ.packages.${system}.templ
                 pkgs.golangci-lint
               ];
               text = ''
                 snekcheck --fix "$PROJECT_ROOT" && \
-                nix fmt "$PROJECT_ROOT" -- --quiet && \
-                (cd "$GO_ROOT" && go mod tidy && go fmt ./... && go vet ./... && \
+                nix fmt "$PROJECT_ROOT/flake.nix" "$NIX_ROOT" -- --quiet && \
+                (cd "$GO_ROOT" && \
+                templ generate
+                go mod tidy && go fmt ./... && go vet ./... && \
                 golangci-lint run ./...)
               '';
             }}/bin/lint";
           };
-          server = {
+          run-server = {
             description = "Runs the portfolio server.";
             exec = "${pkgs.writeShellApplication {
-              name = "server";
+              name = "run-server";
               runtimeInputs = [
                 goPkg
                 inputs.gomod2nix.legacyPackages.${system}.gomod2nix
               ];
               text = ''
-                (cd "$GO_ROOT" && \
-                go mod tidy && \
-                gomod2nix) && \
+                (cd "$GO_ROOT" && go mod tidy && gomod2nix) && \
                 nix run "$PROJECT_ROOT"#server -- "$@"
               '';
-            }}/bin/server";
+            }}/bin/run-server";
           };
           unit = {
             description = "Runs all unit tests.";

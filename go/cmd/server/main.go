@@ -26,6 +26,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Usage:\n  server <flag> ...\n\n%s", flagSet.FlagUsages())
 	}
 	help := flagSet.BoolP("help", "h", false, "Print usage help")
+	port := flagSet.Uint16P("port", "p", 8080, "Which port to listen to")
 	if flagSet.Parse(os.Args) != nil {
 		panic("failed to parse command line flags and arguments")
 	}
@@ -35,6 +36,8 @@ func main() {
 		cli.Exit(nil)
 	}
 
-	err := Run()
+	err := Run(Config{
+		Port: *port,
+	})
 	cli.Exit(err)
 }

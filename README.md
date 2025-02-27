@@ -5,4 +5,4 @@
 ![License](https://img.shields.io/github/license/jtrrll/portfolio?label=License)
 <!-- markdownlint-enable MD013 -->
 
-jtrrll's personal portfolio.
+Jackson Terrill's personal portfolio.
