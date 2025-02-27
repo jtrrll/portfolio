@@ -1,16 +1,31 @@
 schema = 4
-vendorModulesTxt = "# github.com/davecgh/go-spew v1.1.1\n## explicit\ngithub.com/davecgh/go-spew/spew\n# github.com/fatih/color v1.18.0\n## explicit; go 1.17\ngithub.com/fatih/color\n# github.com/kr/pretty v0.3.1\n## explicit; go 1.12\n# github.com/mattn/go-colorable v0.1.13\n## explicit; go 1.15\ngithub.com/mattn/go-colorable\n# github.com/mattn/go-isatty v0.0.20\n## explicit; go 1.15\ngithub.com/mattn/go-isatty\n# github.com/pmezard/go-difflib v1.0.0\n## explicit\ngithub.com/pmezard/go-difflib/difflib\n# github.com/rogpeppe/go-internal v1.12.0\n## explicit; go 1.20\n# github.com/spf13/pflag v1.0.5\n## explicit; go 1.12\ngithub.com/spf13/pflag\n# github.com/stretchr/testify v1.10.0\n## explicit; go 1.17\ngithub.com/stretchr/testify/assert\ngithub.com/stretchr/testify/assert/yaml\n# golang.org/x/sys v0.28.0\n## explicit; go 1.18\ngolang.org/x/sys/unix\ngolang.org/x/sys/windows\n# gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c\n## explicit; go 1.11\n# gopkg.in/yaml.v3 v3.0.1\n## explicit\ngopkg.in/yaml.v3\n"
+vendorModulesTxt = "# github.com/a-h/templ v0.3.833\n## explicit; go 1.23\ngithub.com/a-h/templ\ngithub.com/a-h/templ/runtime\ngithub.com/a-h/templ/safehtml\n# github.com/davecgh/go-spew v1.1.1\n## explicit\ngithub.com/davecgh/go-spew/spew\n# github.com/fatih/color v1.18.0\n## explicit; go 1.17\ngithub.com/fatih/color\n# github.com/felixge/httpsnoop v1.0.4\n## explicit; go 1.13\ngithub.com/felixge/httpsnoop\n# github.com/go-logr/logr v1.4.2\n## explicit; go 1.18\ngithub.com/go-logr/logr\ngithub.com/go-logr/logr/funcr\n# github.com/go-logr/stdr v1.2.2\n## explicit; go 1.16\ngithub.com/go-logr/stdr\n# github.com/go-pkgz/routegroup v1.3.1\n## explicit; go 1.22\ngithub.com/go-pkgz/routegroup\n# github.com/google/uuid v1.6.0\n## explicit\ngithub.com/google/uuid\n# github.com/mattn/go-colorable v0.1.13\n## explicit; go 1.15\ngithub.com/mattn/go-colorable\n# github.com/mattn/go-isatty v0.0.20\n## explicit; go 1.15\ngithub.com/mattn/go-isatty\n# github.com/pmezard/go-difflib v1.0.0\n## explicit\ngithub.com/pmezard/go-difflib/difflib\n# github.com/spf13/pflag v1.0.5\n## explicit; go 1.12\ngithub.com/spf13/pflag\n# github.com/stretchr/testify v1.10.0\n## explicit; go 1.17\ngithub.com/stretchr/testify/assert\ngithub.com/stretchr/testify/assert/yaml\n# go.opentelemetry.io/auto/sdk v1.1.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/auto/sdk\ngo.opentelemetry.io/auto/sdk/internal/telemetry\n# go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.59.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/contrib/instrumentation/net/http/otelhttp\ngo.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/internal/request\ngo.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/internal/semconv\ngo.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/internal/semconvutil\n# go.opentelemetry.io/otel v1.34.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel\ngo.opentelemetry.io/otel/attribute\ngo.opentelemetry.io/otel/baggage\ngo.opentelemetry.io/otel/codes\ngo.opentelemetry.io/otel/internal\ngo.opentelemetry.io/otel/internal/attribute\ngo.opentelemetry.io/otel/internal/baggage\ngo.opentelemetry.io/otel/internal/global\ngo.opentelemetry.io/otel/propagation\ngo.opentelemetry.io/otel/semconv/v1.20.0\ngo.opentelemetry.io/otel/semconv/v1.26.0\n# go.opentelemetry.io/otel/exporters/stdout/stdoutlog v0.10.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/exporters/stdout/stdoutlog\n# go.opentelemetry.io/otel/exporters/stdout/stdoutmetric v1.34.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/exporters/stdout/stdoutmetric\n# go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.34.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/exporters/stdout/stdouttrace\n# go.opentelemetry.io/otel/log v0.10.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/log\ngo.opentelemetry.io/otel/log/embedded\ngo.opentelemetry.io/otel/log/global\ngo.opentelemetry.io/otel/log/internal/global\ngo.opentelemetry.io/otel/log/noop\n# go.opentelemetry.io/otel/metric v1.34.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/metric\ngo.opentelemetry.io/otel/metric/embedded\ngo.opentelemetry.io/otel/metric/noop\n# go.opentelemetry.io/otel/sdk v1.34.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/sdk\ngo.opentelemetry.io/otel/sdk/instrumentation\ngo.opentelemetry.io/otel/sdk/internal/env\ngo.opentelemetry.io/otel/sdk/internal/x\ngo.opentelemetry.io/otel/sdk/resource\ngo.opentelemetry.io/otel/sdk/trace\ngo.opentelemetry.io/otel/sdk/trace/tracetest\n# go.opentelemetry.io/otel/sdk/log v0.10.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/sdk/log\ngo.opentelemetry.io/otel/sdk/log/internal/x\n# go.opentelemetry.io/otel/sdk/metric v1.34.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/sdk/metric\ngo.opentelemetry.io/otel/sdk/metric/exemplar\ngo.opentelemetry.io/otel/sdk/metric/internal\ngo.opentelemetry.io/otel/sdk/metric/internal/aggregate\ngo.opentelemetry.io/otel/sdk/metric/internal/x\ngo.opentelemetry.io/otel/sdk/metric/metricdata\n# go.opentelemetry.io/otel/trace v1.34.0\n## explicit; go 1.22.0\ngo.opentelemetry.io/otel/trace\ngo.opentelemetry.io/otel/trace/embedded\ngo.opentelemetry.io/otel/trace/noop\n# golang.org/x/sys v0.29.0\n## explicit; go 1.18\ngolang.org/x/sys/unix\ngolang.org/x/sys/windows\ngolang.org/x/sys/windows/registry\n# gopkg.in/yaml.v3 v3.0.1\n## explicit\ngopkg.in/yaml.v3\n"
 
 [mod]
+  [mod."github.com/a-h/templ"]
+    version = "v0.3.833"
+    hash = "sha256-OSGAJDVPYqgb72DZXeemLp37aGrrxMt+PQNKW5voKQ0="
   [mod."github.com/davecgh/go-spew"]
     version = "v1.1.1"
     hash = "sha256-nhzSUrE1fCkN0+RL04N4h8jWmRFPPPWbCuDc7Ss0akI="
   [mod."github.com/fatih/color"]
     version = "v1.18.0"
     hash = "sha256-pP5y72FSbi4j/BjyVq/XbAOFjzNjMxZt2R/lFFxGWvY="
-  [mod."github.com/kr/pretty"]
-    version = "v0.3.1"
-    hash = "sha256-DlER7XM+xiaLjvebcIPiB12oVNjyZHuJHoRGITzzpKU="
+  [mod."github.com/felixge/httpsnoop"]
+    version = "v1.0.4"
+    hash = "sha256-c1JKoRSndwwOyOxq9ddCe+8qn7mG9uRq2o/822x5O/c="
+  [mod."github.com/go-logr/logr"]
+    version = "v1.4.2"
+    hash = "sha256-/W6qGilFlZNTb9Uq48xGZ4IbsVeSwJiAMLw4wiNYHLI="
+  [mod."github.com/go-logr/stdr"]
+    version = "v1.2.2"
+    hash = "sha256-rRweAP7XIb4egtT1f2gkz4sYOu7LDHmcJ5iNsJUd0sE="
+  [mod."github.com/go-pkgz/routegroup"]
+    version = "v1.3.1"
+    hash = "sha256-nJxYY/hmQNIzJiF8PXv9WtImPoXI5xgmhZ5aTelGKso="
+  [mod."github.com/google/uuid"]
+    version = "v1.6.0"
+    hash = "sha256-VWl9sqUzdOuhW0KzQlv0gwwUQClYkmZwSydHG2sALYw="
   [mod."github.com/mattn/go-colorable"]
     version = "v0.1.13"
     hash = "sha256-qb3Qbo0CELGRIzvw7NVM1g/aayaz4Tguppk9MD2/OI8="
@@ -20,21 +35,51 @@ vendorModulesTxt = "# github.com/davecgh/go-spew v1.1.1\n## explicit\ngithub.com
   [mod."github.com/pmezard/go-difflib"]
     version = "v1.0.0"
     hash = "sha256-/FtmHnaGjdvEIKAJtrUfEhV7EVo5A/eYrtdnUkuxLDA="
-  [mod."github.com/rogpeppe/go-internal"]
-    version = "v1.12.0"
-    hash = "sha256-qvDNCe3l84/LgrA8X4O15e1FeDcazyX91m9LmXGXX6M="
   [mod."github.com/spf13/pflag"]
     version = "v1.0.5"
     hash = "sha256-w9LLYzxxP74WHT4ouBspH/iQZXjuAh2WQCHsuvyEjAw="
   [mod."github.com/stretchr/testify"]
     version = "v1.10.0"
     hash = "sha256-fJ4gnPr0vnrOhjQYQwJ3ARDKPsOtA7d4olQmQWR+wpI="
+  [mod."go.opentelemetry.io/auto/sdk"]
+    version = "v1.1.0"
+    hash = "sha256-cA9qCCu8P1NSJRxgmpfkfa5rKyn9X+Y/9FSmSd5xjyo="
+  [mod."go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"]
+    version = "v0.59.0"
+    hash = "sha256-zeC30S2MV7W2xxS5rVfPGhZO4jcdPpxxfy3QvBkt/pQ="
+  [mod."go.opentelemetry.io/otel"]
+    version = "v1.34.0"
+    hash = "sha256-hnuuTSxaf9yMO/23xWdcTGNzvnnJiqUiL4nzYwUV5bc="
+  [mod."go.opentelemetry.io/otel/exporters/stdout/stdoutlog"]
+    version = "v0.10.0"
+    hash = "sha256-+x2nQ2PSgj5XFM87/KwT38cJKmE67krsjlf4Ehcj+UE="
+  [mod."go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"]
+    version = "v1.34.0"
+    hash = "sha256-BBtiZz6iiQseNCVmy+PgsMIdNr0AikUm0E08v+0i0rU="
+  [mod."go.opentelemetry.io/otel/exporters/stdout/stdouttrace"]
+    version = "v1.34.0"
+    hash = "sha256-wAeTBnOQDrNBCrG83AAv5UiQdDAnGZ33wIyl8o2MgSE="
+  [mod."go.opentelemetry.io/otel/log"]
+    version = "v0.10.0"
+    hash = "sha256-/AkAKvwZTBJmmxGMVDHqs/FhWtuzUmtkJSqGnhMRMgc="
+  [mod."go.opentelemetry.io/otel/metric"]
+    version = "v1.34.0"
+    hash = "sha256-JklGKJiMf1fpsE9pmnuLUq26g6wVp173v4GWJ7Xp5s4="
+  [mod."go.opentelemetry.io/otel/sdk"]
+    version = "v1.34.0"
+    hash = "sha256-Af0INyxxGvtDRMt2szun/m56z6Rzwnxw/ckk7b/hR3M="
+  [mod."go.opentelemetry.io/otel/sdk/log"]
+    version = "v0.10.0"
+    hash = "sha256-7QsUmY/5Rg1GGgbfLmkHYmxQ1HhmF9Zvq07b0+ZIOoo="
+  [mod."go.opentelemetry.io/otel/sdk/metric"]
+    version = "v1.34.0"
+    hash = "sha256-jToGqaCoNGfypXaCgjl527zXyOrpACvhERcCqD8ogK4="
+  [mod."go.opentelemetry.io/otel/trace"]
+    version = "v1.34.0"
+    hash = "sha256-u11KJ4WTDtcb0tVv7d/HOdhq8Ea+c1QPBO8MbsCQu9Q="
   [mod."golang.org/x/sys"]
-    version = "v0.28.0"
-    hash = "sha256-kzSlDo5FKsQU9cLefIt2dueGUfz9XuEW+mGSGlPATGc="
-  [mod."gopkg.in/check.v1"]
-    version = "v1.0.0-20201130134442-10cb98267c6c"
-    hash = "sha256-VlIpM2r/OD+kkyItn6vW35dyc0rtkJufA93rjFyzncs="
+    version = "v0.29.0"
+    hash = "sha256-qfsodJQ1H1CBI8yQWOvsXJgY5qHmiuw566HrrIseYHI="
   [mod."gopkg.in/yaml.v3"]
     version = "v3.0.1"
     hash = "sha256-FqL9TKYJ0XkNwJFnq9j0VvJ5ZUU1RvH/52h/f5bkYAU="

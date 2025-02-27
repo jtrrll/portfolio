@@ -1,15 +1,15 @@
-package main_test
+package cli_test
 
 import (
 	"errors"
 	"fmt"
-	main "portfolio/cmd/server"
+	"portfolio/internal/cli"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestError(t *testing.T) {
+func TestCommandLineError(t *testing.T) {
 	t.Parallel()
 	t.Run("Error()", func(t *testing.T) {
 		t.Parallel()
@@ -21,7 +21,7 @@ func TestError(t *testing.T) {
 				"uh oh",
 			}
 			for _, input := range testCases {
-				assert.Equal(t, input, main.Error{Message: input}.Error())
+				assert.Equal(t, input, cli.CommandLineError{Message: input}.Error())
 			}
 		})
 		t.Run("formats correctly as an error", func(t *testing.T) {
@@ -32,7 +32,7 @@ func TestError(t *testing.T) {
 				"uh oh",
 			}
 			for _, input := range testCases {
-				assert.Equal(t, input, fmt.Sprintf("%v", main.Error{Message: input}))
+				assert.Equal(t, input, fmt.Sprintf("%v", cli.CommandLineError{Message: input}))
 			}
 		})
 		t.Run("can be wrapped and unwrapped", func(t *testing.T) {
@@ -43,12 +43,12 @@ func TestError(t *testing.T) {
 				"uh oh",
 			}
 			for _, input := range testCases {
-				baseError := main.Error{Message: input}
+				baseError := cli.CommandLineError{Message: input}
 				assert.Equal(t, baseError, errors.Unwrap(fmt.Errorf("wrapped error: %w", baseError)))
 			}
 		})
 	})
-	t.Run("ExitCode()", func(t *testing.T) {
+	t.Run("Code()", func(t *testing.T) {
 		t.Parallel()
 		t.Run("produces the correct exit code", func(t *testing.T) {
 			t.Parallel()
@@ -58,7 +58,7 @@ func TestError(t *testing.T) {
 				2,
 			}
 			for _, input := range testCases {
-				assert.Equal(t, input, main.Error{Code: input}.ExitCode())
+				assert.Equal(t, input, cli.CommandLineError{StatusCode: input}.Code())
 			}
 		})
 	})
