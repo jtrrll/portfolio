@@ -1,3 +1,4 @@
+{ self, ... }:
 {
   perSystem =
     {
@@ -13,7 +14,7 @@
               buildInputs = [ inputs'.snekcheck.packages.default ];
             }
             ''
-              find ../../** -exec snekcheck {} +
+              find ${self}/** -exec snekcheck {} +
               touch $out
             '';
       };
