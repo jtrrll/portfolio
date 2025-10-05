@@ -5,6 +5,7 @@
     {
       lib,
       pkgs,
+      self',
       ...
     }:
     {
@@ -36,10 +37,18 @@
           );
 
           languages = {
-            go.enable = true;
+            go = {
+              enable = true;
+              package = self'.packages.default.go;
+            };
             nix.enable = true;
             typst.enable = true;
           };
+
+          packages = [
+            self'.packages.default.templ
+            pkgs.woff2
+          ];
 
           git-hooks = {
             default_stages = [ "pre-push" ];

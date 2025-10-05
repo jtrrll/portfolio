@@ -1,0 +1,15 @@
+package components
+
+import "strings"
+
+// A eye-catching header component.
+templ Header(heading string, subheading string) {
+	<div class="header">
+		<h1>
+			{ strings.ToUpper(heading) }
+		</h1>
+		<h2>
+			{ strings.ToLower(subheading) }
+		</h2>
+	</div>
+}
