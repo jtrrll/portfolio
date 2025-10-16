@@ -6,9 +6,8 @@ import (
 
 	"embed"
 
-	"portfolio/internal/components"
+	"portfolio/cmd/server/pages"
 
-	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -37,36 +36,11 @@ func NewRouter() http.Handler {
 			}
 		},
 	)
-	pagesRouter.GET("/", templPage(
-		"Jackson Terrill",
-		"Jackson Terrill's personal portfolio",
-		components.Header("Jackson\nTerrill", "Developer + Designer + Creator"),
-		templ.Raw("index"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/software", templPage(
-		"Software - Jackson Terrill",
-		"Jackson Terrill's software projects",
-		components.Header("Software", "By Jackson Terrill"),
-		templ.Raw("software"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/interactive", templPage(
-		"Interactive Media - Jackson Terrill",
-		"Jackson Terrill's interactive media",
-		components.Header("Interactive Media", "By Jackson Terrill"),
-		templ.Raw("interactive media"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/visual", templPage(
-		"Visual Media - Jackson Terrill",
-		"Jackson Terrill's visual media",
-		components.Header("Visual Media", "By Jackson Terrill"),
-		templ.Raw("visual media"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/audio", templPage(
-		"Audio Media - Jackson Terrill",
-		"Jackson Terrill's audio media",
-		components.Header("Audio Media", "By Jackson Terrill"),
-		templ.Raw("audio media"), // TODO: Fill in content
-	))
+	pagesRouter.GET("/", pages.Index())
+	pagesRouter.GET("/audio", pages.Audio())
+	pagesRouter.GET("/interactive", pages.Interactive())
+	pagesRouter.GET("/software", pages.Software())
+	pagesRouter.GET("/visual", pages.Visual())
 
 	globalRouter.Group("/static",
 		func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -85,12 +59,4 @@ func NewRouter() http.Handler {
 	)
 
 	return globalRouter
-}
-
-func templPage(title string, description string, children ...templ.Component) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		ctx := templ.WithChildren(c.Request().Context(), templ.Join(children...))
-		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTMLCharsetUTF8)
-		return components.Layout(title, description).Render(ctx, c.Response())
-	}
 }

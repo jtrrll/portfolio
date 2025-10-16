@@ -48,12 +48,14 @@ type navLink struct {
 templ navbar(links ...navLink) {
 	<div class="navbar">
 		<nav>
-			<a class="logo" href="/">
-				<p>jtrrll</p>
-			</a>
+			<div class="clickable">
+				<a class="logo" href="/">
+					jtrrll
+				</a>
+			</div>
 			<ul>
 				for _, link := range links {
-					<li>
+					<li class="clickable">
 						<a href={ link.href }>
 							{ strings.ToLower(link.text) }
 						</a>

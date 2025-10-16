@@ -60,6 +60,23 @@ img {
   color: var(--color-accent);
 }
 
+.clickable {
+  cursor: pointer;
+  transition: transform 300ms ease-in-out;
+
+  :hover {
+    transform: scale(1.05);
+  }
+  
+  :active {
+    transform: scale(0.95);
+  }
+
+  > * {
+    display: inline-block;
+  }
+}
+
 .header {
   font-family: var(--font-display);
   margin-bottom: 1rem;
