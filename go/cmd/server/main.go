@@ -10,7 +10,8 @@ package main
 import (
 	"log"
 	"net/http"
-	"portfolio/internal/server"
+
+	"github.com/jtrrll/portfolio/internal/server"
 )
 
 // main serves a portfolio website.

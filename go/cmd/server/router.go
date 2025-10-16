@@ -4,10 +4,11 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/jtrrll/portfolio/internal/pages"
+
 	"embed"
 
-	"portfolio/cmd/server/pages"
-
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -36,11 +37,11 @@ func NewRouter() http.Handler {
 			}
 		},
 	)
-	pagesRouter.GET("/", pages.Index())
-	pagesRouter.GET("/audio", pages.Audio())
-	pagesRouter.GET("/interactive", pages.Interactive())
-	pagesRouter.GET("/software", pages.Software())
-	pagesRouter.GET("/visual", pages.Visual())
+	pagesRouter.GET("/", templPage(pages.Index()))
+	pagesRouter.GET("/audio", templPage(pages.Audio()))
+	pagesRouter.GET("/interactive", templPage(pages.Interactive()))
+	pagesRouter.GET("/software", templPage(pages.Software()))
+	pagesRouter.GET("/visual", templPage(pages.Visual()))
 
 	globalRouter.Group("/static",
 		func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -59,4 +60,11 @@ func NewRouter() http.Handler {
 	)
 
 	return globalRouter
+}
+
+func templPage(page templ.Component) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTMLCharsetUTF8)
+		return page.Render(c.Request().Context(), c.Response())
+	}
 }

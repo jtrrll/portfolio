@@ -27,12 +27,13 @@ buildGoModule {
     filter = absPath: _: !(lib.strings.hasSuffix "_templ.go" absPath);
     src = lib.cleanSource ../../go;
   };
+  subPackages = [ "cmd/server" ];
   nativeBuildInputs = [ templ ];
   passthru = {
     inherit templ;
   };
 
-  vendorHash = "sha256-L68PKlziIxCbYWvJWNvZ1wrGWmFm3UTO+ZukUF9uN4I=";
+  vendorHash = lib.fakeHash;
   version = "0.0.0";
 
   preBuild = ''

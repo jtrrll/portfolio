@@ -1,0 +1,16 @@
+// Pages to be served to users.
+package pages
+
+import "github.com/jtrrll/portfolio/internal/components"
+
+templ Index() {
+	@components.Layout("Jackson Terrill", "Jackson Terrill's personal portfolio") {
+		@components.Header("Jackson\nTerrill", "Developer + Designer + Creator")
+		<p>
+			I'm a software engineer at Proof and graduate of Computer Science and Business at
+			<a href="https://www.northeastern.edu/">[Northeastern University]</a>.
+			In my spare time, I build <a href="/software">[software]</a>, produce <a href="/audio">[music]</a>,
+			and make <a href="/interactive">[games]</a>.
+		</p>
+	}
+}

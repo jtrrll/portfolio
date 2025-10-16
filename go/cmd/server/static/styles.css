@@ -1,11 +1,4 @@
-@font-face {
-  font-family: "Cageroll Standard";
-  font-style: normal;
-  font-weight: 100 900;
-  src: url("/static/fonts/cageroll_standard.woff2") format("woff2");
-  font-display: swap;
-  unicode-range: "U+0000-007F";
-}
+@import url("/static/fonts/fonts.css");
 
 @keyframes fly-in {
   from { opacity: 0; transform: translateY(10px); }
@@ -15,6 +8,10 @@
 @keyframes fly-out {
   from { opacity: 1; transform: translateY(0px); }
   to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes enable-pointer-events {
+  to { pointer-events: auto; }
 }
 
 @view-transition {
@@ -35,7 +32,8 @@
 
 ::view-transition-new(page) {
   opacity: 0;
-  animation: 200ms ease-out 300ms forwards fly-in;
+  animation: 200ms ease-out forwards fly-in;
+  animation-delay: 300ms;
 }
 
 ::view-transition-old(page) {
@@ -62,19 +60,9 @@ img {
 
 .clickable {
   cursor: pointer;
-  transition: transform 300ms ease-in-out;
-
-  :hover {
-    transform: scale(1.05);
-  }
-  
-  :active {
-    transform: scale(0.95);
-  }
-
-  > * {
-    display: inline-block;
-  }
+  transition: filter 300ms ease;
+  :hover { filter: brightness(1.1); }
+  :active { filter: brightness(1.0); }
 }
 
 .header {
