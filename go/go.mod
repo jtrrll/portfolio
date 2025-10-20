@@ -3,7 +3,7 @@ module portfolio
 go 1.25.0
 
 require (
-	github.com/a-h/templ v0.3.943
+	github.com/a-h/templ v0.3.960
 	github.com/labstack/echo/v4 v4.13.4
 )
 
