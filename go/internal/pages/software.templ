@@ -1,13 +1,32 @@
 package pages
 
 import "github.com/jtrrll/portfolio/internal/components"
+import "github.com/jtrrll/portfolio/internal/services/software"
 
-// TODO: Fill in content
 templ Software() {
 	@components.Layout("Software - Jackson Terrill", "Jackson Terrill's software projects") {
 		@components.Header("Software", "By Jackson Terrill")
-		<p>
-			software
-		</p>
+		{{
+			repos, err := software.GetAllRepositorySummaries(ctx)
+			if err != nil {
+				return err
+			}
+		}}
+		@repositories(repos)
 	}
+}
+
+templ repositories(repositories []software.RepositorySummary) {
+	<ul>
+		for _, repo := range repositories {
+			<li>
+				{ repo.Name }
+				<img
+					src={ repo.Thumbnail }
+					alt={ repo.Name }
+				/>
+				{ repo.Description }
+			</li>
+		}
+	</ul>
 }

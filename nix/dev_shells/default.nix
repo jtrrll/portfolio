@@ -54,7 +54,33 @@
 
             scripts.dev-server = {
               exec = ''
-                find ${config.devenv.root}/go | entr -r nix run
+                set -euo pipefail
+
+                find ${config.devenv.root}/go | entr -n sh -c '
+                  log() {
+                    echo "[dev-server][$(date +'%H:%M:%S')] $*"
+                  }
+
+                  log "Building new version..."
+                  nix build . -o /tmp/portfolio-server-build --quiet &> /dev/null || {
+                    log "❌ Build failed, keeping current server running"
+                    exit 0
+                  }
+
+                  if [ -f /tmp/portfolio-server.pid ]; then
+                    PID=$(cat /tmp/portfolio-server.pid)
+                    if kill -0 "$PID" 2>/dev/null; then
+                      log "Stopping old server (PID $PID)..."
+                      kill "$PID"
+                      wait "$PID" 2>/dev/null || true
+                    fi
+                  fi
+
+                  log "Starting new server..."
+                  /tmp/portfolio-server-build/bin/server run --port 8080 &
+                  echo $! > /tmp/portfolio-server.pid
+                  log "✅ Running on http://localhost:8080"
+                '
               '';
               packages = [ pkgs.entr ];
               description = "Runs the server and rebuilds on file changes";

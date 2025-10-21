@@ -8,22 +8,51 @@ Usage:
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/jtrrll/portfolio/internal/server"
+	"github.com/urfave/cli/v3"
 )
 
 // main serves a portfolio website.
 // Will exit with a non-zero status code upon failure.
 func main() {
-	server := server.New(
-		server.WithPort(8080), // TODO: Read port from CLI flag
-		server.WithHandler(NewRouter()),
-	)
+	cmd := &cli.Command{
+		Name:  "portfolio-server",
+		Usage: "Serve jtrrll's portfolio website",
+		Action: func(ctx context.Context, cmd *cli.Command) error {
+			server := server.New(
+				server.WithPort(cmd.Uint("port")),
+				server.WithHandler(NewRouter()),
+			)
+			// TODO: Add terminal output that prints a welcome message
+			if err := server.ListenAndServe(); err != http.ErrServerClosed {
+				return err
+			}
+			// TODO: Add a safe shutdown message
+			return nil
+		},
+		Flags: []cli.Flag{
+			&cli.UintFlag{
+				Name:    "port",
+				Usage:   "Port to run the server on",
+				Value:   8080,
+				Aliases: []string{"p"},
+				Action: func(ctx context.Context, cmd *cli.Command, v uint) error {
+					if v < 1024 || 65535 < v {
+						return fmt.Errorf("invalid port %d (must be between 1024 and 65535)", v)
+					}
+					return nil
+				},
+			},
+		},
+	}
 
-	// TODO: HTTP -> HTTPS
-	if err := server.ListenAndServe(); err != http.ErrServerClosed {
+	if err := cmd.Run(context.Background(), os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
