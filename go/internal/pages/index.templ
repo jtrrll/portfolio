@@ -3,15 +3,18 @@ package pages
 
 import "github.com/jtrrll/portfolio/internal/components"
 
-var links = []struct{text string; href string;}{
+var links = []struct {
+	text string
+	href string
+}{
 	{text: "resume", href: "/static/jackson_terrill_resume.pdf"},
 	{text: "contact", href: "mailto:jacksonterrill3@gmail.com"},
-};
+}
 
 templ Index() {
 	@components.Layout("Jackson Terrill", "Jackson Terrill's personal portfolio") {
 		@components.Header("Jackson\nTerrill", "Developer + Creator")
-		<div style="display: flex; padding: 1rem 0;">
+		<div style="display: flex;">
 			<img
 				src="https://avatars.githubusercontent.com/u/77407057"
 				alt="Jackson Terrill"
@@ -23,10 +26,10 @@ templ Index() {
 					When I'm not building solutions or optimizing workflows, I'm making video games or recording music.
 					Explore this collection of my work and contact me if you want to create something together.
 				</p>
-				<div style="display: flex; justify-content: space-evenly; padding: 1rem;">
+				<div style="display: flex; justify-content: space-evenly;">
 					for _, link := range links {
-						<div class="clickable" style="background-color: var(--color-accent); color: var(--color-light); padding: 0 1.5rem;">
-							<a href={ link.href } style="align-items: center; display: flex; justify-content: space-evenly;">
+						<div class="clickable" style="margin: 1rem;">
+							<a href={ link.href } style="align-items: center; background-color: var(--color-dark); color: var(--color-light); display: flex; justify-content: space-evenly; padding: 0 1.5rem;">
 								{ link.text }
 								@linkArrow()
 							</a>
@@ -49,6 +52,6 @@ templ linkArrow() {
 		<path
 			d="M2 12.5701L10.5489 4.02254L4.33037 4.02254L4.33037 2L14 2L14 11.6696L11.9775 11.6696L11.9775 5.45243L3.42987 14L2 12.5701Z"
 			fill="currentColor"
-		/>
+		></path>
 	</svg>
 }

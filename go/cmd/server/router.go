@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"strings"
+	"os"
 
 	"github.com/jtrrll/portfolio/internal/pages"
 
@@ -46,8 +46,8 @@ func NewRouter() http.Handler {
 	globalRouter.Group("/static",
 		func(next echo.HandlerFunc) echo.HandlerFunc {
 			return func(c echo.Context) error {
-				if strings.HasPrefix(c.Request().URL.Path, "/static/fonts/") {
-					c.Response().Header().Set("Cache-Control", "public, max-age=31536000")
+				if os.Getenv("ENVIRONMENT") != "development" {
+					c.Response().Header().Set("Cache-Control", "public, max-age=86400")
 				}
 				return next(c)
 			}

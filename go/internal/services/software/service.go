@@ -10,7 +10,7 @@ type RepositorySummary struct {
 	Name        string
 	Description string
 	Thumbnail   string
-	Languages   map[string]float32
+	Languages   map[string]int
 }
 
 func GetAllRepositorySummaries(ctx context.Context) ([]RepositorySummary, error) {
@@ -25,14 +25,19 @@ func GetAllRepositorySummaries(ctx context.Context) ([]RepositorySummary, error)
 		g.Go(func() error {
 			thumbnail, err := GetThumbnailForRepository(ctx, repo.GetOwner().GetLogin(), repo.GetName())
 			if err != nil {
-				thumbnail = ""
+				return err
+			}
+
+			languages, err := ListLanguagesForRepository(ctx, repo.GetOwner().GetLogin(), repo.GetName())
+			if err != nil {
+				return err
 			}
 
 			summaries[i] = RepositorySummary{
 				Name:        repo.GetName(),
 				Description: repo.GetDescription(),
 				Thumbnail:   thumbnail,
-				Languages:   nil,
+				Languages:   languages,
 			}
 			return nil
 		})

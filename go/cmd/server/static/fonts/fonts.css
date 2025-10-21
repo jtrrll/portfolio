@@ -1,8 +1,0 @@
-@font-face {
-  font-family: "Cageroll Standard";
-  font-style: normal;
-  font-weight: 100 900;
-  src: url("/static/fonts/cageroll_standard.woff2") format("woff2");
-  font-display: swap;
-  unicode-range: "U+0000-007F";
-}

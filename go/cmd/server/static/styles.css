@@ -1,5 +1,3 @@
-@import url("/static/fonts/fonts.css");
-
 @keyframes fly-in {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0px); }
@@ -15,11 +13,11 @@
 }
 
 :root {
-  --color-dark: #f15b20;
-  --color-light: #fff8e9;
-  --color-accent: #ff8a5e;
+  --color-dark: #030202;
+  --color-light: #f7f5f0;
+  --color-accent: #4d93a8;
 
-  --font-display: "Cageroll Standard", var(--font-sans);
+  --font-display: "Anybody", var(--font-sans);
   --font-mono: "Courier New", monospace;
   --font-sans: "IBM Plex Sans", Helvetica, sans-serif;
 
@@ -55,38 +53,60 @@ img {
 
 main {
   view-transition-name: main;
+
+  > * {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .clickable {
   cursor: pointer;
   transition: filter 300ms ease;
-  :hover { filter: brightness(1.1); }
-  :active { filter: brightness(1.0); }
+  :hover { filter: invert(0.2); }
+  :active { filter: invert(0.1); }
+}
+
+.grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-auto-flow: row;
+
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  @media (min-width: 40rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 64rem) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .header {
-  font-family: var(--font-display);
   max-width: 42rem;
 
   h1 {
+    font-family: var(--font-display);
     font-size: 3rem;
+    font-weight: 700;
+    font-variation-settings: "wdth" 125;
     line-height: 1;
     white-space: pre-wrap;
     width: fit-content;
 
-    @media (width >= 40rem) {
+    @media (min-width: 40rem) {
       font-size: 4.5rem;
     }
   }
-  h2 {
-    color: var(--color-accent);
-    font-size: 1.5rem;
-    width: fit-content;
+  p {
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    padding-right: 0.5rem;
+    text-align: right;
   }
 }
 
 .navbar {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.5rem;
 
   .logo {
@@ -97,6 +117,7 @@ main {
     align-items: center;
     display: flex;
     justify-content: space-between;
+    margin: 0.25rem 0;
   }
 
   li {

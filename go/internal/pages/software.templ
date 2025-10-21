@@ -2,6 +2,8 @@ package pages
 
 import "github.com/jtrrll/portfolio/internal/components"
 import "github.com/jtrrll/portfolio/internal/services/software"
+import "fmt"
+import "strings"
 
 templ Software() {
 	@components.Layout("Software - Jackson Terrill", "Jackson Terrill's software projects") {
@@ -9,7 +11,7 @@ templ Software() {
 		{{
 			repos, err := software.GetAllRepositorySummaries(ctx)
 			if err != nil {
-				return err
+				// TODO: Handle this
 			}
 		}}
 		@repositories(repos)
@@ -17,15 +19,25 @@ templ Software() {
 }
 
 templ repositories(repositories []software.RepositorySummary) {
-	<ul>
+	<ul class="grid">
 		for _, repo := range repositories {
-			<li>
-				{ repo.Name }
-				<img
-					src={ repo.Thumbnail }
-					alt={ repo.Name }
-				/>
-				{ repo.Description }
+			<li class="clickable" style="border-width: 2px;">
+				<a href={fmt.Sprintf("/software/%s", repo.Name)} style="background-color: var(--color-light);">
+					<div>
+						{ strings.ToLower(repo.Name) }
+					</div>
+					<img
+						src={ repo.Thumbnail }
+						alt={ repo.Name }
+						style="margin: 0.5rem;"
+					/>
+					<p style="margin: 0.5rem;">
+						{ repo.Description }
+					</p>
+					<div>
+					TODO: Languages
+					</div>
+				</a>
 			</li>
 		}
 	</ul>

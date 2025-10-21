@@ -38,6 +38,10 @@
               }
             );
 
+            env = {
+              ENVIRONMENT = "development";
+            };
+
             languages = {
               go = {
                 enable = true;
