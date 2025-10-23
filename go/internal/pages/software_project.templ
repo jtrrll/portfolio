@@ -1,0 +1,15 @@
+package pages
+
+import "fmt"
+import "github.com/jtrrll/portfolio/internal/components"
+
+// TODO: Fill in content
+templ SoftwareProject(name string) {
+	@components.Layout(fmt.Sprintf("%s - Jackson Terrill", name), "Jackson Terrill's audio media") {
+		@components.Header(name, "Last Updated: TODO")
+		<p>
+			UNDER CONSTRUCTION...
+			(Come back soon!)
+		</p>
+	}
+}

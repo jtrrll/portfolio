@@ -26,14 +26,12 @@ templ Index() {
 					When I'm not building solutions or optimizing workflows, I'm making video games or recording music.
 					Explore this collection of my work and contact me if you want to create something together.
 				</p>
-				<div style="display: flex; justify-content: space-evenly;">
+				<div style="display: flex; justify-content: space-evenly; padding: 1rem;">
 					for _, link := range links {
-						<div class="clickable" style="margin: 1rem;">
-							<a href={ link.href } style="align-items: center; background-color: var(--color-dark); color: var(--color-light); display: flex; justify-content: space-evenly; padding: 0 1.5rem;">
-								{ link.text }
-								@linkArrow()
-							</a>
-						</div>
+						<a href={ link.href } class="clickable" style="align-items: center; background-color: var(--color-dark); color: var(--color-light); display: flex; justify-content: space-evenly; padding: 0 1.5rem;">
+							{ link.text }
+							@linkArrow()
+						</a>
 					}
 				</div>
 			</div>

@@ -41,6 +41,9 @@ func NewRouter() http.Handler {
 	pagesRouter.GET("/audio", templPage(pages.Audio()))
 	pagesRouter.GET("/interactive", templPage(pages.Interactive()))
 	pagesRouter.GET("/software", templPage(pages.Software()))
+	pagesRouter.GET("/software/:name", func(c echo.Context) error {
+		return templPage(pages.SoftwareProject(c.Param("name")))(c)
+	})
 	pagesRouter.GET("/visual", templPage(pages.Visual()))
 
 	globalRouter.Group("/static",

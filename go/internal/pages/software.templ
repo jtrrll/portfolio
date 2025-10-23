@@ -21,21 +21,21 @@ templ Software() {
 templ repositories(repositories []software.RepositorySummary) {
 	<ul class="grid">
 		for _, repo := range repositories {
-			<li class="clickable" style="border-width: 2px;">
-				<a href={fmt.Sprintf("/software/%s", repo.Name)} style="background-color: var(--color-light);">
-					<div>
-						{ strings.ToLower(repo.Name) }
+			<li>
+				<a href={fmt.Sprintf("/software/%s", repo.Name)} class="clickable" style="background-color: var(--color-light); border-width: 2px; display: inline-block; height: 100%; width: 100%;">
+					<div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+						<p style="background-color: var(--color-dark); color: var(--color-light); font-weight: 700; padding: 0 0.5rem;">
+							{ strings.ToLower(repo.Name) }
+						</p>
 					</div>
-					<img
-						src={ repo.Thumbnail }
-						alt={ repo.Name }
-						style="margin: 0.5rem;"
-					/>
+					<div style="padding: 0.5rem;">
+						<img src={ repo.Thumbnail } alt={ repo.Name }/>
+					</div>
 					<p style="margin: 0.5rem;">
 						{ repo.Description }
 					</p>
-					<div>
-					TODO: Languages
+					<div style="padding: 0.5rem;">
+						TODO: Languages
 					</div>
 				</a>
 			</li>
