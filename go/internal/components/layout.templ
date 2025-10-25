@@ -16,9 +16,9 @@ templ Layout(title string, description string) {
 				navLink{text: "visual", href: templ.URL("/visual")},
 				navLink{text: "audio", href: templ.URL("/audio")},
 			)
-			<div class="page">
+			<main>
 				{ children... }
-			</div>
+			</main>
 		</body>
 	</html>
 }
@@ -29,12 +29,12 @@ templ head(title string, description string) {
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title>{ title }</title>
-		<link rel="icon" href="static/favicon.ico"/>
-		<link rel="stylesheet" href="static/preflight.css"/>
-		<link rel="stylesheet" href="static/styles.css"/>
+		<link rel="icon" href="/static/favicon.ico"/>
+		<link rel="stylesheet" href="/static/preflight.css"/>
+		<link rel="stylesheet" href="/static/styles.css"/>
 		<link rel="preconnect" href="https://fonts.googleapis.com"/>
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet"/>
+		<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,50..150,100..900;1,50..150,100..900&family=IBM+Plex+Sans:ital,wdth,wght@0,75..100,100..700;1,75..100,100..700&display=swap" rel="stylesheet"/>
 		<meta name="description" content={ description }/>
 	</head>
 }
@@ -48,24 +48,37 @@ type navLink struct {
 templ navbar(links ...navLink) {
 	<div class="navbar">
 		<nav>
-			<a class="logo" href="/">
-				<p>jtrrll</p>
+			<a class="clickable logo" href="/">
+				jtrrll
 			</a>
 			<ul>
 				for _, link := range links {
 					<li>
-						<a href={ link.href }>
+						<a href={ link.href } class="clickable">
 							{ strings.ToLower(link.text) }
 						</a>
 					</li>
 				}
 			</ul>
 		</nav>
-		<div class="loading-bar-bg">
-			<div class="loading-bar-fg" style="width: 0%;"></div>
+		<div
+			style="
+			background-color: color-mix(in srgb, var(--color-dark) 25%, transparent);
+    	height: 0.125rem;
+		"
+		>
+			<div
+				id="loading-bar"
+				style="
+				background-color: var(--color-dark);
+				height: 100%;
+				transition: width 500ms ease-out;
+				width: 0%;
+			"
+			></div>
 		</div>
 		<script>
-			const loadingBar = document.querySelector(".navbar .loading-bar-fg");
+			const loadingBar = document.getElementById("loading-bar");
 			requestAnimationFrame(() => {
 				loadingBar.style.width = "100%";
 			});

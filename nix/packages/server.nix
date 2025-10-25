@@ -17,6 +17,8 @@ let
 in
 buildGoModule {
   pname = "portfolio-server";
+  version = "0.0.0";
+
   meta = {
     description = "Jackson Terrill's personal portfolio.";
     homepage = "https://github.com/jtrrll/portfolio";
@@ -27,16 +29,15 @@ buildGoModule {
     filter = absPath: _: !(lib.strings.hasSuffix "_templ.go" absPath);
     src = lib.cleanSource ../../go;
   };
+  subPackages = [ "cmd/server" ];
   nativeBuildInputs = [ templ ];
   passthru = {
     inherit templ;
   };
-
-  vendorHash = "sha256-L68PKlziIxCbYWvJWNvZ1wrGWmFm3UTO+ZukUF9uN4I=";
-  version = "0.0.0";
+  vendorHash = "sha256-U53wKtH8I9ESFb6QiTvOi4Ha8R216EZjX+3EuiWjq5I=";
 
   preBuild = ''
-    templ generate -path internal/components
+    templ generate
     cp ${preflight} cmd/server/static/preflight.css
     cp ${resume} cmd/server/static/jackson_terrill_resume.pdf
   '';

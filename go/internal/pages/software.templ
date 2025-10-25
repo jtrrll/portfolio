@@ -1,0 +1,44 @@
+package pages
+
+import "github.com/jtrrll/portfolio/internal/components"
+import "github.com/jtrrll/portfolio/internal/services/software"
+import "fmt"
+import "strings"
+
+templ Software() {
+	@components.Layout("Software - Jackson Terrill", "Jackson Terrill's software projects") {
+		@components.Header("Software", "By Jackson Terrill")
+		{{
+			repos, err := software.GetAllRepositorySummaries(ctx)
+			if err != nil {
+				// TODO: Handle this
+			}
+		}}
+		@repositories(repos)
+	}
+}
+
+templ repositories(repositories []software.RepositorySummary) {
+	<ul class="grid">
+		for _, repo := range repositories {
+			<li>
+				<a href={fmt.Sprintf("/software/%s", repo.Name)} class="clickable" style="background-color: var(--color-light); border-width: 2px; display: inline-block; height: 100%; width: 100%;">
+					<div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+						<p style="background-color: var(--color-dark); color: var(--color-light); font-weight: 700; padding: 0 0.5rem;">
+							{ strings.ToLower(repo.Name) }
+						</p>
+					</div>
+					<div style="padding: 0.5rem;">
+						<img src={ repo.Thumbnail } alt={ repo.Name }/>
+					</div>
+					<p style="margin: 0.5rem;">
+						{ repo.Description }
+					</p>
+					<div style="padding: 0.5rem;">
+						TODO: Languages
+					</div>
+				</a>
+			</li>
+		}
+	</ul>
+}

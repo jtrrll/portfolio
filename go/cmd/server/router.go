@@ -2,11 +2,11 @@ package main
 
 import (
 	"net/http"
-	"strings"
+	"os"
+
+	"github.com/jtrrll/portfolio/internal/pages"
 
 	"embed"
-
-	"portfolio/internal/components"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -37,42 +37,20 @@ func NewRouter() http.Handler {
 			}
 		},
 	)
-	pagesRouter.GET("/", templPage(
-		"Jackson Terrill",
-		"Jackson Terrill's personal portfolio",
-		components.Header("Jackson\nTerrill", "Developer + Designer + Creator"),
-		templ.Raw("index"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/software", templPage(
-		"Software - Jackson Terrill",
-		"Jackson Terrill's software projects",
-		components.Header("Software", "By Jackson Terrill"),
-		templ.Raw("software"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/interactive", templPage(
-		"Interactive Media - Jackson Terrill",
-		"Jackson Terrill's interactive media",
-		components.Header("Interactive Media", "By Jackson Terrill"),
-		templ.Raw("interactive media"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/visual", templPage(
-		"Visual Media - Jackson Terrill",
-		"Jackson Terrill's visual media",
-		components.Header("Visual Media", "By Jackson Terrill"),
-		templ.Raw("visual media"), // TODO: Fill in content
-	))
-	pagesRouter.GET("/audio", templPage(
-		"Audio Media - Jackson Terrill",
-		"Jackson Terrill's audio media",
-		components.Header("Audio Media", "By Jackson Terrill"),
-		templ.Raw("audio media"), // TODO: Fill in content
-	))
+	pagesRouter.GET("/", templPage(pages.Index()))
+	pagesRouter.GET("/audio", templPage(pages.Audio()))
+	pagesRouter.GET("/interactive", templPage(pages.Interactive()))
+	pagesRouter.GET("/software", templPage(pages.Software()))
+	pagesRouter.GET("/software/:name", func(c echo.Context) error {
+		return templPage(pages.SoftwareProject(c.Param("name")))(c)
+	})
+	pagesRouter.GET("/visual", templPage(pages.Visual()))
 
 	globalRouter.Group("/static",
 		func(next echo.HandlerFunc) echo.HandlerFunc {
 			return func(c echo.Context) error {
-				if strings.HasPrefix(c.Request().URL.Path, "/static/fonts/") {
-					c.Response().Header().Set("Cache-Control", "public, max-age=31536000")
+				if os.Getenv("ENVIRONMENT") != "development" {
+					c.Response().Header().Set("Cache-Control", "public, max-age=86400")
 				}
 				return next(c)
 			}
@@ -87,10 +65,9 @@ func NewRouter() http.Handler {
 	return globalRouter
 }
 
-func templPage(title string, description string, children ...templ.Component) echo.HandlerFunc {
+func templPage(page templ.Component) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		ctx := templ.WithChildren(c.Request().Context(), templ.Join(children...))
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTMLCharsetUTF8)
-		return components.Layout(title, description).Render(ctx, c.Response())
+		return page.Render(c.Request().Context(), c.Response())
 	}
 }
