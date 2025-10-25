@@ -7,11 +7,9 @@ on:
   schedule:
     - cron: '0 06 * * MON'
   workflow_dispatch:
-
 concurrency:
   cancel-in-progress: true
   group: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
   build:
     name: Build
