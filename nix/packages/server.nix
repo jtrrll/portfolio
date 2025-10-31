@@ -2,6 +2,7 @@
   buildGoModule,
   dev ? false,
   fetchFromGitHub,
+  lib,
   resume,
   templ,
 }:
@@ -24,7 +25,7 @@ buildGoModule {
     mainProgram = "server";
   };
   subPackages = [ "cmd/server" ];
-  tags = if dev then [ "dev" ] else [ ];
+  tags = lib.optionals dev [ "dev" ];
   nativeBuildInputs = [ templ ];
   passthru = {
     inherit templ;

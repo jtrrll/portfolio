@@ -12,8 +12,8 @@
                   homepage = "https://github.com/jtrrll/portfolio";
                   license = lib.licenses.mit;
                 };
-                src = pkgs.nix-gitignore.gitignoreRecursiveSource [ ] ../../go;
-                vendorHash = "sha256-U53wKtH8I9ESFb6QiTvOi4Ha8R216EZjX+3EuiWjq5I=";
+                src = lib.cleanSource (pkgs.nix-gitignore.gitignoreRecursiveSource [ ] ../../go);
+                vendorHash = "sha256-G4W95LmSJaMEe9gJr4jYEgTKnRylm1SnPNPr/+xEfY0=";
               } args
             );
         in
