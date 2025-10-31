@@ -48,10 +48,3 @@ func GetAllRepositorySummaries(ctx context.Context) ([]RepositorySummary, error)
 	}
 	return summaries, nil
 }
-
-type RepositoryDetails struct {
-}
-
-func GetRepositoryDetails() (*RepositoryDetails, error) {
-	return nil, nil
-}

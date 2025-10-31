@@ -6,6 +6,7 @@
       lib,
       pkgs,
       self',
+      system,
       ...
     }:
     {
@@ -38,10 +39,6 @@
               }
             );
 
-            env = {
-              ENVIRONMENT = "development";
-            };
-
             languages = {
               go = {
                 enable = true;
@@ -66,7 +63,7 @@
                   }
 
                   log "Building new version..."
-                  nix build . -o /tmp/portfolio-server-build --quiet &> /dev/null || {
+                  nix build --impure --expr "(builtins.getFlake (toString ./.)).packages.${system}.default.override { dev = true; }" -o /tmp/portfolio-server-build --quiet &> /dev/null || {
                     log "❌ Build failed, keeping current server running"
                     exit 0
                   }

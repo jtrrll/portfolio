@@ -1,7 +1,7 @@
 {
   buildGoModule,
+  dev ? false,
   fetchFromGitHub,
-  lib,
   resume,
   templ,
 }:
@@ -21,20 +21,14 @@ buildGoModule {
 
   meta = {
     description = "Jackson Terrill's personal portfolio.";
-    homepage = "https://github.com/jtrrll/portfolio";
-    license = lib.licenses.mit;
     mainProgram = "server";
   };
-  src = lib.cleanSourceWith {
-    filter = absPath: _: !(lib.strings.hasSuffix "_templ.go" absPath);
-    src = lib.cleanSource ../../go;
-  };
   subPackages = [ "cmd/server" ];
+  tags = if dev then [ "dev" ] else [ ];
   nativeBuildInputs = [ templ ];
   passthru = {
     inherit templ;
   };
-  vendorHash = "sha256-U53wKtH8I9ESFb6QiTvOi4Ha8R216EZjX+3EuiWjq5I=";
 
   preBuild = ''
     templ generate
