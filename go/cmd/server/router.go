@@ -2,15 +2,14 @@ package main
 
 import (
 	"net/http"
-	"os"
 
+	"github.com/jtrrll/portfolio/internal/middleware"
 	"github.com/jtrrll/portfolio/internal/pages"
 
 	"embed"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 //go:embed static
@@ -27,16 +26,7 @@ func NewRouter() http.Handler {
 	globalRouter.Group("/api")
 
 	// TODO: Add middleware and routes
-	pagesRouter := globalRouter.Group("",
-		func(next echo.HandlerFunc) echo.HandlerFunc {
-			return func(c echo.Context) error {
-				if err, ok := next(c).(*echo.HTTPError); ok && err.Code == http.StatusNotFound {
-					c.Redirect(http.StatusSeeOther, "/")
-				}
-				return nil
-			}
-		},
-	)
+	pagesRouter := globalRouter.Group("", middleware.RedirectWhenNotFound("/"))
 	pagesRouter.GET("/", templPage(pages.Index()))
 	pagesRouter.GET("/audio", templPage(pages.Audio()))
 	pagesRouter.GET("/interactive", templPage(pages.Interactive()))
@@ -46,21 +36,7 @@ func NewRouter() http.Handler {
 	})
 	pagesRouter.GET("/visual", templPage(pages.Visual()))
 
-	globalRouter.Group("/static",
-		func(next echo.HandlerFunc) echo.HandlerFunc {
-			return func(c echo.Context) error {
-				if os.Getenv("ENVIRONMENT") != "development" {
-					c.Response().Header().Set("Cache-Control", "public, max-age=86400")
-				}
-				return next(c)
-			}
-		},
-		middleware.StaticWithConfig(middleware.StaticConfig{
-			Browse:     true,
-			Filesystem: http.FS(staticAssets),
-			Root:       "static",
-		}),
-	)
+	globalRouter.Group("/static", middleware.ServeStaticAssets(http.FS(staticAssets), "static"))
 
 	return globalRouter
 }
