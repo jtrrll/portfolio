@@ -1,26 +1,58 @@
+---
 name: Update Dependencies
+
 on:
   schedule:
-    - cron: "0 22 * * FRI"
+    - cron: "0 22 1-7 * FRI"   # First friday of the month.
+    - cron: "0 22 15-21 * FRI" # Third friday of the month.
   workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
-  nix-flake:
-    name: Update Nix flake dependencies
+  development:
+    name: Update development dependencies
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v21
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@v21
       - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@v27
+        id: update
+        uses: DeterminateSystems/update-flake-lock@v28
         with:
-          pr-title: "deps: update Nix flake dependencies"
+          branch: "update_flake_lock_development"
+          inputs: devenv flake-parts justix nixpkgs snekcheck treefmt-nix
+          pr-title: "deps: update development dependencies"
           pr-labels: |
             automated
             dependencies
-            nix
           token: ${{ secrets.PR_BOT_PERSONAL_ACCESS_TOKEN }}
+      - name: Enable auto-merge
+        if: steps.update.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ secrets.PR_BOT_PERSONAL_ACCESS_TOKEN }}
+        run: gh pr merge ${{ steps.update.outputs.pull-request-number }} --auto --squash
+  build:
+    name: Update build dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@v21
+      - name: Update flake.lock
+        id: update
+        uses: DeterminateSystems/update-flake-lock@v28
+        with:
+          branch: "update_flake_lock_build"
+          inputs: nixpkgs-resume nixpkgs-server
+          pr-title: "deps: update build dependencies"
+          pr-labels: |
+            automated
+            dependencies
+          token: ${{ secrets.PR_BOT_PERSONAL_ACCESS_TOKEN }}
+      - name: Enable auto-merge
+        if: steps.update.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ secrets.PR_BOT_PERSONAL_ACCESS_TOKEN }}
+        run: gh pr merge ${{ steps.update.outputs.pull-request-number }} --auto --squash
