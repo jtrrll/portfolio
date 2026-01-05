@@ -3,6 +3,7 @@
   imports = [ inputs.devenv.flakeModule ];
   perSystem =
     {
+      inputs',
       lib,
       pkgs,
       self',
@@ -10,13 +11,45 @@
       ...
     }:
     {
-      devenv = builtins.addErrorContext "while defining devenv" {
+      devenv = {
         modules = [
+          inputs.justix.devenvModules.default
           {
             containers = lib.mkForce { }; # Workaround to remove containers from flake checks.
           }
+          {
+            claude.code.enable = true;
+            justix = {
+              enable = true;
+              mcpServer.enable = true;
+              justfile.config.recipes = {
+                default = {
+                  attributes = {
+                    default = true;
+                    doc = "Lists available recipes";
+                    private = true;
+                  };
+                  commands = "@just --list";
+                };
+                develop-server = {
+                  attributes.doc = "Runs the server in development mode with live reloading";
+                  commands = ''
+                    @templ generate --watch --proxy="http://localhost:8080" --cmd="go run ."
+                  '';
+                };
+                fmt = {
+                  attributes.doc = "Formats and lints files";
+                  commands = ''
+                    @find "{{ paths }}" ! -path '*/.*' -exec ${lib.getExe inputs'.snekcheck.packages.default} --fix {} +
+                    @nix fmt -- {{ paths }}
+                  '';
+                  parameters = [ "*paths='.'" ];
+                };
+              };
+            };
+          }
         ];
-        shells.default = builtins.addErrorContext "while defining default shell" (
+        shells.default =
           { config, ... }:
           {
             enterShell = lib.getExe (
@@ -118,8 +151,7 @@
                 statix.enable = true;
               };
             };
-          }
-        );
+          };
       };
     };
 }

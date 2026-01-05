@@ -2,11 +2,32 @@
   description = "Jackson Terrill's personal portfolio.";
 
   inputs = {
-    devenv.url = "github:cachix/devenv";
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    ### Development dependencies ###
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    snekcheck.url = "github:jtrrll/snekcheck";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    devenv = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:cachix/devenv";
+    };
+    flake-parts = {
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+      url = "github:hercules-ci/flake-parts";
+    };
+    justix = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:jtrrll/justix";
+    };
+    snekcheck = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:jtrrll/snekcheck";
+    };
+    treefmt-nix = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:numtide/treefmt-nix";
+    };
+
+    ### Build dependencies ###
+    nixpkgs-resume.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-server.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
   outputs =

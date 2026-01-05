@@ -2,7 +2,7 @@
 {
   imports = [ inputs.treefmt-nix.flakeModule ];
   perSystem = _: {
-    treefmt.programs = builtins.addErrorContext "while defining formatter" {
+    treefmt.programs = {
       actionlint.enable = true;
       deadnix.enable = true;
       gofmt.enable = true;
