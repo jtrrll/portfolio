@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/jtrrll/portfolio/internal/middleware"
 	"github.com/jtrrll/portfolio/internal/pages"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 //go:embed static
@@ -18,32 +20,44 @@ var staticAssets embed.FS
 // NewRouter creates an HTTP request handler.
 func NewRouter() http.Handler {
 	globalRouter := echo.New()
+	globalRouter.Use(
+		echoMiddleware.Recover(),
+		echoMiddleware.Secure(),
+		echoMiddleware.RateLimiter(echoMiddleware.NewRateLimiterMemoryStore(20)),
+		echoMiddleware.BodyLimit("1MB"),
+		echoMiddleware.Decompress(),
+		echoMiddleware.GzipWithConfig(echoMiddleware.GzipConfig{
+			Level: 5,
+		}),
+		echoMiddleware.ContextTimeout(60*time.Second),
+	)
 
-	// TODO: Add middleware
-	globalRouter.Use()
-
-	// TODO: Add middleware and routes
 	globalRouter.Group("/api")
 
-	// TODO: Add middleware and routes
-	pagesRouter := globalRouter.Group("", middleware.RedirectWhenNotFound("/"))
-	pagesRouter.GET("/", templPage(pages.Index()))
-	pagesRouter.GET("/audio", templPage(pages.Audio()))
-	pagesRouter.GET("/interactive", templPage(pages.Interactive()))
-	pagesRouter.GET("/software", templPage(pages.Software()))
+	pagesRouter := globalRouter.Group("",
+		middleware.CacheControl(PAGE_MAX_AGE),
+		middleware.RedirectWhenNotFound("/"))
+	pagesRouter.GET("/", templHandler(pages.Index()))
+	pagesRouter.GET("/audio", templHandler(pages.Audio()))
+	pagesRouter.GET("/interactive", templHandler(pages.Interactive()))
+	pagesRouter.GET("/software", templHandler(pages.Software()))
 	pagesRouter.GET("/software/:name", func(c echo.Context) error {
-		return templPage(pages.SoftwareProject(c.Param("name")))(c)
+		return templHandler(pages.SoftwareProject(c.Param("name")))(c)
 	})
-	pagesRouter.GET("/visual", templPage(pages.Visual()))
+	pagesRouter.GET("/visual", templHandler(pages.Visual()))
 
-	globalRouter.Group("/static", middleware.ServeStaticAssets(http.FS(staticAssets), "static"))
+	globalRouter.Group("/static",
+		middleware.CacheControl(STATIC_ASSET_MAX_AGE),
+		echoMiddleware.StaticWithConfig(echoMiddleware.StaticConfig{
+			Browse:     true,
+			Filesystem: http.FS(staticAssets),
+			Root:       "static",
+		}))
 
 	return globalRouter
 }
 
-func templPage(page templ.Component) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTMLCharsetUTF8)
-		return page.Render(c.Request().Context(), c.Response())
-	}
+func templHandler(component templ.Component) echo.HandlerFunc {
+	templHandler := templ.Handler(component, templ.WithStreaming())
+	return echo.WrapHandler(templHandler)
 }
