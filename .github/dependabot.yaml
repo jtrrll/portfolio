@@ -7,7 +7,6 @@ updates:
     labels:
       - automated
       - dependencies
-      - github-actions
     schedule:
       interval: weekly
   - package-ecosystem: gomod
@@ -17,6 +16,5 @@ updates:
     labels:
       - automated
       - dependencies
-      - github-actions
     schedule:
       interval: weekly
