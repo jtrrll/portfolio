@@ -19,6 +19,7 @@ templ Layout(title string, description string) {
 			<main>
 				{ children... }
 			</main>
+			@preloadManager()
 		</body>
 	</html>
 }
@@ -48,13 +49,13 @@ type navLink struct {
 templ navbar(links ...navLink) {
 	<div class="navbar">
 		<nav>
-			<a class="clickable logo" href="/">
+			<a href="/" preload class="clickable logo">
 				jtrrll
 			</a>
 			<ul>
 				for _, link := range links {
 					<li>
-						<a href={ link.href } class="clickable">
+						<a href={ link.href } preload class="clickable">
 							{ strings.ToLower(link.text) }
 						</a>
 					</li>
@@ -68,7 +69,7 @@ templ navbar(links ...navLink) {
 		"
 		>
 			<div
-				id="loading-bar"
+				loading-bar
 				style="
 				background-color: var(--color-dark);
 				height: 100%;
@@ -77,11 +78,95 @@ templ navbar(links ...navLink) {
 			"
 			></div>
 		</div>
-		<script>
-			const loadingBar = document.getElementById("loading-bar");
-			requestAnimationFrame(() => {
-				loadingBar.style.width = "100%";
-			});
-    </script>
+		@loadingBarManager()
 	</div>
+}
+
+var loadingBarHandle = templ.NewOnceHandle()
+
+// Manages progress animations for loading bars.
+templ loadingBarManager() {
+	@loadingBarHandle.Once() {
+		<script>
+			window.addEventListener('load', () => {
+				document.querySelectorAll('[loading-bar]').forEach((loadingBar) => {
+					requestAnimationFrame(() => {
+						loadingBar.style.width = "100%";
+					});
+				});
+			});
+		</script>
+	}
+}
+
+var preloadHandle = templ.NewOnceHandle()
+
+// Manages preloading for anchor tags with the "preload" attribute.
+templ preloadManager() {
+	@preloadHandle.Once() {
+		<script>
+			const preloadedUrls = new Set();
+			const preloadDelay = 20; // ms delay before preloading starts
+
+			function setupPreload(link) {
+				let preloadTimer = null;
+
+				const doPreload = (href) => {
+					if (!href || preloadedUrls.has(href)) return;
+
+					// Use fetch to preload and populate the browser's HTTP cache
+					fetch(href, {
+						method: 'GET',
+						credentials: 'same-origin',
+						priority: 'low'
+					}).then(() => {
+						preloadedUrls.add(href);
+					}, () => {});
+				};
+
+				link.addEventListener('mouseenter', () => {
+					const href = link.getAttribute('href');
+					if (!href || preloadedUrls.has(href)) return;
+
+					// Short delay to avoid preloading on accidental hovers
+					preloadTimer = setTimeout(() => doPreload(href), preloadDelay);
+				});
+
+				link.addEventListener('mouseleave', () => {
+					// Clear timer if user moves away quickly
+					if (preloadTimer) {
+						clearTimeout(preloadTimer);
+						preloadTimer = null;
+					}
+				});
+
+				// Also preload on touchstart for mobile devices
+				link.addEventListener('touchstart', () => {
+					const href = link.getAttribute('href');
+					doPreload(href);
+				}, { passive: true });
+			}
+
+			// Setup existing links with preload attribute
+			document.querySelectorAll('a[preload]').forEach(setupPreload);
+
+			// Watch for new links added dynamically
+			const observer = new MutationObserver((mutations) => {
+				mutations.forEach((mutation) => {
+					mutation.addedNodes.forEach((node) => {
+						if (node.nodeType === 1) { // Element node
+							if (node.matches && node.matches('a[preload]')) {
+								setupPreload(node);
+							}
+							if (node.querySelectorAll) {
+								node.querySelectorAll('a[preload]').forEach(setupPreload);
+							}
+						}
+					});
+				});
+			});
+
+			observer.observe(document.body, { childList: true, subtree: true });
+		</script>
+	}
 }
