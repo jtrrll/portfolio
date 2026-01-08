@@ -4,11 +4,11 @@
   stdenvNoCC,
 }:
 let
-  typstWithPackages = typst.withPackages (typstPkgs: with typstPkgs; [ basic-resume_0_2_7 ]);
+  typstWithPackages = typst.withPackages (typstPkgs: with typstPkgs; [ basic-resume_0_2_9 ]);
 in
 stdenvNoCC.mkDerivation {
   name = "jackson-terrill-resume";
-  src = ../../typst/resume.typ;
+  src = ./resume.typ;
   nativeBuildInputs = [
     ibm-plex
     typstWithPackages
