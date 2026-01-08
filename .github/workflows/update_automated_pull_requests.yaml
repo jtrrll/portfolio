@@ -1,15 +1,11 @@
----
 name: Update Automated Pull Requests
-
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   update-pull-requests:
     name: Update automated pull requests

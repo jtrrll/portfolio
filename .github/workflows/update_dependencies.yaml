@@ -1,16 +1,12 @@
----
 name: Update Dependencies
-
 on:
   schedule:
-    - cron: "0 22 1-7 * FRI"   # First friday of the month.
+    - cron: "0 22 1-7 * FRI" # First friday of the month.
     - cron: "0 22 15-21 * FRI" # Third friday of the month.
   workflow_dispatch:
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   development:
     name: Update development dependencies

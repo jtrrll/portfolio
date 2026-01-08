@@ -6,6 +6,7 @@
       actionlint.enable = true;
       deadnix.enable = true;
       gofmt.enable = true;
+      keep-sorted.enable = true;
       nixfmt.enable = true;
       statix.enable = true;
       templ.enable = true;

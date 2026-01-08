@@ -33,7 +33,13 @@
   outputs =
     { flake-parts, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ ./nix ];
+      imports = [
+        ./apps
+        ./checks
+        ./dev_shells
+        ./formatter
+        ./packages
+      ];
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
     };
 }
