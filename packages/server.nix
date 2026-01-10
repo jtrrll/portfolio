@@ -1,7 +1,5 @@
 {
   buildGoModule,
-  dev ? false,
-  lib,
   preflight,
   resume,
   templ,
@@ -15,7 +13,6 @@ buildGoModule {
     mainProgram = "server";
   };
   subPackages = [ "cmd/server" ];
-  tags = lib.optionals dev [ "dev" ];
   nativeBuildInputs = [ templ ];
   passthru = {
     inherit templ;
