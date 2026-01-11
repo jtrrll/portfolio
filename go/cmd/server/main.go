@@ -27,7 +27,7 @@ func main() {
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			server := server.New(
 				server.WithPort(cmd.Uint("port")),
-				server.WithHandler(NewRouter()),
+				server.WithHandler(NewRouter(cmd.Bool("trust-proxy"))),
 			)
 			// TODO: Add terminal output that prints a welcome message
 			if err := server.ListenAndServe(); err != http.ErrServerClosed {
@@ -39,7 +39,7 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.UintFlag{
 				Name:    "port",
-				Usage:   "Port to run the server on",
+				Usage:   "Port to listen on",
 				Value:   8080,
 				Aliases: []string{"p"},
 				Action: func(ctx context.Context, cmd *cli.Command, v uint) error {
@@ -48,6 +48,11 @@ func main() {
 					}
 					return nil
 				},
+			},
+			&cli.BoolFlag{
+				Name:  "trust-proxy",
+				Usage: "Trust X-Forwarded-For header from reverse proxy",
+				Value: false,
 			},
 		},
 	}
