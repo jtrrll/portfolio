@@ -21,8 +21,25 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v21
       - name: Build resume
         run: nix build .#resume
-      - name: Build portfolio
+      - name: Build server
         run: nix build .
+      - name: Check server health
+        run: |
+          ./result/bin/server &
+          SERVER_PID=$!
+
+          for i in {1..30}; do
+            if curl -f http://localhost:8080/api/health 2>/dev/null; then
+              echo "Health check passed after $i seconds"
+              kill "$SERVER_PID" 2>/dev/null || true
+              exit 0
+            fi
+            echo "Waiting for server... ($i/30)"
+            sleep 1
+          done
+          echo "Health check failed after 30 seconds"
+          kill "$SERVER_PID" 2>/dev/null || true
+          exit 1
   check:
     name: Check
     runs-on: ubuntu-latest

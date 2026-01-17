@@ -11,4 +11,8 @@ Jackson Terrill's personal portfolio.
 ## Usage
 
 1. [Install Nix](https://zero-to-nix.com/start/install)
-<!-- TODO: Finish usage -->
+2. Start the web server by running the following:
+
+   ```sh
+   nix run github:jtrrll/portfolio
+   ```
