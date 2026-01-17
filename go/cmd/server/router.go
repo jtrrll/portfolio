@@ -1,12 +1,15 @@
 package main
 
 import (
+	"log/slog"
 	"net/http"
 	"time"
 
 	"github.com/jtrrll/portfolio/internal/handlers"
 	"github.com/jtrrll/portfolio/internal/middleware"
 	"github.com/jtrrll/portfolio/internal/pages"
+	slogecho "github.com/samber/slog-echo"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 
 	"embed"
 
@@ -17,8 +20,8 @@ import (
 //go:embed static
 var staticAssets embed.FS
 
-// NewRouter creates an HTTP request handler.
-func NewRouter(trustProxy bool) http.Handler {
+// NewRouter creates an HTTP request handler with routing and middleware.
+func NewRouter(logger *slog.Logger, trustProxy bool) http.Handler {
 	globalRouter := echo.New()
 
 	if trustProxy {
@@ -26,14 +29,18 @@ func NewRouter(trustProxy bool) http.Handler {
 	}
 
 	globalRouter.Use(
-		echoMiddleware.Recover(),
+		slogecho.NewWithConfig(logger, slogecho.Config{
+			WithClientIP: true,
+			WithSpanID:   true,
+			WithTraceID:  true,
+		}),
+		otelecho.Middleware("portfolio"),
+		middleware.DoNotPanic(),
 		echoMiddleware.Secure(),
 		echoMiddleware.RateLimiter(echoMiddleware.NewRateLimiterMemoryStore(20)),
 		echoMiddleware.BodyLimit("1MB"),
 		echoMiddleware.Decompress(),
-		echoMiddleware.GzipWithConfig(echoMiddleware.GzipConfig{
-			Level: 5,
-		}),
+		echoMiddleware.GzipWithConfig(echoMiddleware.GzipConfig{Level: 5}),
 		echoMiddleware.ContextTimeout(60*time.Second),
 	)
 
@@ -45,14 +52,14 @@ func NewRouter(trustProxy bool) http.Handler {
 	pagesRouter := globalRouter.Group("",
 		middleware.CacheControl(PAGE_MAX_AGE),
 		middleware.RedirectWhenNotFound("/"))
-	pagesRouter.GET("/", handlers.TemplHandler(pages.Index()))
-	pagesRouter.GET("/audio", handlers.TemplHandler(pages.Audio()))
-	pagesRouter.GET("/interactive", handlers.TemplHandler(pages.Interactive()))
-	pagesRouter.GET("/software", handlers.TemplHandler(pages.Software()))
+	pagesRouter.GET("/", handlers.TemplPage(pages.Index()))
+	pagesRouter.GET("/audio", handlers.TemplPage(pages.Audio()))
+	pagesRouter.GET("/interactive", handlers.TemplPage(pages.Interactive()))
+	pagesRouter.GET("/software", handlers.TemplPage(pages.Software()))
 	pagesRouter.GET("/software/:name", func(c echo.Context) error {
-		return handlers.TemplHandler(pages.SoftwareProject(c.Param("name")))(c)
+		return handlers.TemplPage(pages.SoftwareProject(c.Param("name")))(c)
 	})
-	pagesRouter.GET("/visual", handlers.TemplHandler(pages.Visual()))
+	pagesRouter.GET("/visual", handlers.TemplPage(pages.Visual()))
 
 	globalRouter.Group("/static",
 		middleware.CacheControl(STATIC_ASSET_MAX_AGE),

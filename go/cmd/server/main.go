@@ -9,13 +9,17 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
-	"net/http"
+	"log/slog"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/jtrrll/portfolio/internal/server"
 	"github.com/urfave/cli/v3"
+	"go.opentelemetry.io/contrib/bridges/otelslog"
 )
 
 // main serves a portfolio website.
@@ -25,16 +29,47 @@ func main() {
 		Name:  "portfolio-server",
 		Usage: "Serve jtrrll's portfolio website",
 		Action: func(ctx context.Context, cmd *cli.Command) error {
-			server := server.New(
-				server.WithPort(cmd.Uint("port")),
-				server.WithHandler(NewRouter(cmd.Bool("trust-proxy"))),
-			)
-			// TODO: Add terminal output that prints a welcome message
-			if err := server.ListenAndServe(); err != http.ErrServerClosed {
+			ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
+			defer stop()
+
+			// Set up logger.
+			logger := slog.New(otelslog.NewHandler("portfolio"))
+			slog.SetDefault(logger)
+
+			// Set up OpenTelemetry.
+			shutdownOpenTelemetry, err := setupOpenTelemetry(ctx)
+			if err != nil {
 				return err
 			}
-			// TODO: Add a safe shutdown message
-			return nil
+			defer func() {
+				err = errors.Join(err, shutdownOpenTelemetry(context.Background()))
+			}()
+
+			// Start HTTP server.
+			srv := server.New(
+				server.WithPort(cmd.Uint("port")),
+				server.WithHandler(NewRouter(logger, cmd.Bool("trust-proxy"))),
+			)
+			srvErr := make(chan error, 1)
+			go func() {
+				fmt.Printf("Starting server on port %d...\n", cmd.Uint("port"))
+				srvErr <- srv.ListenAndServe()
+			}()
+
+			// Wait for interruption.
+			select {
+			case err = <-srvErr:
+				// Error when starting HTTP server.
+				return err
+			case <-ctx.Done():
+				// Wait for first CTRL+C.
+				// Stop receiving signal notifications as soon as possible.
+				stop()
+			}
+
+			fmt.Println("Shutting down gracefully...")
+			err = srv.Shutdown(context.Background())
+			return err
 		},
 		Flags: []cli.Flag{
 			&cli.UintFlag{

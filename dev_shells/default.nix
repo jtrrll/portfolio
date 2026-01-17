@@ -107,6 +107,8 @@
               pkgs.woff2
             ];
 
+            services.opentelemetry-collector.enable = true;
+
             git-hooks = {
               default_stages = [ "pre-push" ];
               hooks = {
