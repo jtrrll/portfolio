@@ -3,7 +3,7 @@
     "bun2nix": {
       "inputs": {
         "flake-parts": "flake-parts_3",
-        "import-tree": "import-tree",
+        "import-tree": "import-tree_2",
         "nixpkgs": [
           "justix",
           "nixpkgs"
@@ -749,6 +749,21 @@
         "type": "github"
       }
     },
+    "import-tree_2": {
+      "locked": {
+        "lastModified": 1763762820,
+        "narHash": "sha256-ZvYKbFib3AEwiNMLsejb/CWs/OL/srFQ8AogkebEPF0=",
+        "owner": "vic",
+        "repo": "import-tree",
+        "rev": "3c23749d8013ec6daa1d7255057590e9ca726646",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vic",
+        "repo": "import-tree",
+        "type": "github"
+      }
+    },
     "justix": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -1178,6 +1193,7 @@
       "inputs": {
         "devenv": "devenv",
         "flake-parts": "flake-parts_2",
+        "import-tree": "import-tree",
         "justix": "justix",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-resume": "nixpkgs-resume",
