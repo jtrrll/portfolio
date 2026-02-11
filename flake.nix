@@ -12,6 +12,7 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
       url = "github:hercules-ci/flake-parts";
     };
+    import-tree.url = "github:vic/import-tree";
     justix = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:jtrrll/justix";
@@ -31,15 +32,29 @@
   };
 
   outputs =
-    { flake-parts, ... }@inputs:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [
-        ./apps
-        ./checks
-        ./dev_shells
-        ./formatter
-        ./packages
-      ];
-      systems = inputs.nixpkgs.lib.systems.flakeExposed;
-    };
+    {
+      flake-parts,
+      import-tree,
+      nixpkgs,
+      ...
+    }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      let
+        modules-tree = nixpkgs.lib.pipe import-tree [
+          (it: it.addPath ./modules)
+          # Matches top-level `*.nix` files and `default.nix` files that are one level deep.
+          (it: it.match "^/[^/]+\.nix$|^/[^/]+/default\.nix$")
+        ];
+      in
+      {
+        imports = [
+          ./dev_shells
+          modules-tree.result
+        ];
+
+        flake.lib.modules-tree = modules-tree;
+
+        systems = nixpkgs.lib.systems.flakeExposed;
+      }
+    );
 }
