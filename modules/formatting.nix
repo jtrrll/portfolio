@@ -1,0 +1,29 @@
+{ inputs, self, ... }:
+{
+  imports = [ inputs.treefmt-nix.flakeModule ];
+
+  perSystem =
+    { inputs', pkgs, ... }:
+    {
+      checks.snekcheck =
+        pkgs.runCommandLocal "snekcheck"
+          {
+            buildInputs = [ inputs'.snekcheck.packages.default ];
+          }
+          ''
+            find ${self}/** -exec snekcheck {} +
+            touch $out
+          '';
+      treefmt.programs = {
+        actionlint.enable = true;
+        deadnix.enable = true;
+        gofmt.enable = true;
+        keep-sorted.enable = true;
+        nixfmt.enable = true;
+        statix.enable = true;
+        templ.enable = true;
+        typstyle.enable = true;
+        yamlfmt.enable = true;
+      };
+    };
+}
