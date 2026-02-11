@@ -137,7 +137,6 @@ func newResource() (*resource.Resource, error) {
 		resource.WithFromEnv(),
 		resource.WithHost(),
 		resource.WithOS(),
-		resource.WithProcess(),
 		resource.WithTelemetrySDK(),
 	)
 }
