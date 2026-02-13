@@ -7,7 +7,7 @@ require (
 	github.com/google/go-github/v76 v76.0.0
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/samber/slog-echo v1.19.1
-	github.com/urfave/cli/v3 v3.6.1
+	github.com/urfave/cli/v3 v3.6.2
 	go.opentelemetry.io/contrib/bridges/otelslog v0.14.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.64.0
 	go.opentelemetry.io/otel v1.39.0
