@@ -29,12 +29,12 @@ func NewRouter(logger *slog.Logger, trustProxy bool) http.Handler {
 	}
 
 	globalRouter.Use(
+		otelecho.Middleware("portfolio"),
 		slogecho.NewWithConfig(logger, slogecho.Config{
 			WithClientIP: true,
 			WithSpanID:   true,
 			WithTraceID:  true,
 		}),
-		otelecho.Middleware("portfolio"),
 		middleware.DoNotPanic(),
 		echoMiddleware.Secure(),
 		echoMiddleware.RateLimiter(echoMiddleware.NewRateLimiterMemoryStore(20)),
