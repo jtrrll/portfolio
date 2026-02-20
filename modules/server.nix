@@ -26,7 +26,7 @@
                   license = serverPkgs.lib.licenses.mit;
                 };
                 src = serverPkgs.lib.cleanSource (serverPkgs.nix-gitignore.gitignoreRecursiveSource [ ] ../go);
-                vendorHash = "sha256-Iz2kqWXZv+0M5BAh400ZwxQe6wYkmwtKQj26fiTK2P0=";
+                vendorHash = "sha256-4l+pdxs5kMGfCxgwTADOsKW+ROsk6U+RVnJNqWw8Ic4=";
               } args
             );
         in

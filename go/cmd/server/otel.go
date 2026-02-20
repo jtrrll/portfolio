@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/stdout/stdoutlog"
-	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
-	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/log"
@@ -51,7 +51,7 @@ func setupOpenTelemetry(ctx context.Context) (func(context.Context) error, error
 	otel.SetTextMapPropagator(prop)
 
 	// Set up trace provider.
-	tracerProvider, err := newTracerProvider(res)
+	tracerProvider, err := newTracerProvider(ctx, res)
 	if err != nil {
 		handleErr(err)
 		return shutdown, err
@@ -60,7 +60,7 @@ func setupOpenTelemetry(ctx context.Context) (func(context.Context) error, error
 	otel.SetTracerProvider(tracerProvider)
 
 	// Set up meter provider.
-	meterProvider, err := newMeterProvider(res)
+	meterProvider, err := newMeterProvider(ctx, res)
 	if err != nil {
 		handleErr(err)
 		return shutdown, err
@@ -69,7 +69,7 @@ func setupOpenTelemetry(ctx context.Context) (func(context.Context) error, error
 	otel.SetMeterProvider(meterProvider)
 
 	// Set up logger provider.
-	loggerProvider, err := newLoggerProvider(res)
+	loggerProvider, err := newLoggerProvider(ctx, res)
 	if err != nil {
 		handleErr(err)
 		return shutdown, err
@@ -87,9 +87,8 @@ func newPropagator() propagation.TextMapPropagator {
 	)
 }
 
-func newTracerProvider(res *resource.Resource) (*trace.TracerProvider, error) {
-	traceExporter, err := stdouttrace.New(
-		stdouttrace.WithPrettyPrint())
+func newTracerProvider(ctx context.Context, res *resource.Resource) (*trace.TracerProvider, error) {
+	traceExporter, err := otlptracegrpc.New(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -101,8 +100,8 @@ func newTracerProvider(res *resource.Resource) (*trace.TracerProvider, error) {
 	return tracerProvider, nil
 }
 
-func newMeterProvider(res *resource.Resource) (*metric.MeterProvider, error) {
-	metricExporter, err := stdoutmetric.New()
+func newMeterProvider(ctx context.Context, res *resource.Resource) (*metric.MeterProvider, error) {
+	metricExporter, err := otlpmetricgrpc.New(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -114,8 +113,8 @@ func newMeterProvider(res *resource.Resource) (*metric.MeterProvider, error) {
 	return meterProvider, nil
 }
 
-func newLoggerProvider(res *resource.Resource) (*log.LoggerProvider, error) {
-	logExporter, err := stdoutlog.New()
+func newLoggerProvider(ctx context.Context, res *resource.Resource) (*log.LoggerProvider, error) {
+	logExporter, err := otlploggrpc.New(ctx)
 	if err != nil {
 		return nil, err
 	}

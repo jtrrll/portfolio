@@ -11,8 +11,7 @@
     }:
     {
       devenv = {
-        modules = [
-          inputs.justix.devenvModules.default
+        modules = (lib.attrValues inputs.justix.modules.devenv) ++ [
           {
             containers = lib.mkForce { }; # Workaround to remove containers from flake checks.
           }
@@ -40,12 +39,9 @@
               }
             );
 
-            claude.code.enable = true;
-
             justix = {
               enable = true;
-              mcpServer.enable = true;
-              justfile.config.recipes = {
+              config.recipes = {
                 build-assets = {
                   attributes = {
                     doc = "Builds static assets for the server";
