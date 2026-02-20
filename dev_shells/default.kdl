@@ -1,0 +1,68 @@
+layout {
+  default_tab_template {
+    pane {
+      borderless true
+      plugin {
+        location "zellij:tab-bar"
+      }
+      size 1
+    }
+    children
+    pane {
+      borderless true
+      plugin {
+        location "zellij:status-bar"
+      }
+      size 2
+    }
+  }
+  tab name="processes" {
+    pane {
+      name "processes"
+      size "80%"
+      command "devenv"
+      args "up"
+      start_suspended true
+    }
+  }
+  tab name="workspace" focus=true split_direction="vertical" {
+    pane {
+      name ""
+      size "50%"
+      focus true
+    }
+    pane {
+      name "assistant"
+      size "25%"
+      command "ai"
+    }
+    pane size="25%" {
+      pane {
+        name "git status"
+        size "50%"
+        command "watch"
+        args "--interval" "10" "--no-title" "--color" "git" "-c" "color.ui=always" "status" "--short"
+      }
+      pane {
+        name "just fmt"
+        size "50%"
+        command "just"
+        args "fmt"
+        start_suspended true
+      }
+    }
+  }
+  tab name="agent" {
+    pane {
+      name "agent"
+      size "80%"
+      command "ai"
+      args "--permission-mode" "acceptEdits"
+      start_suspended true
+    }
+    pane {
+      name ""
+      size "20%"
+    }
+  }
+}
