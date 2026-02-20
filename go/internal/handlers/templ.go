@@ -7,7 +7,6 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
 	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
-	"go.opentelemetry.io/otel/trace"
 )
 
 var (
@@ -31,9 +30,7 @@ func init() {
 func TemplPage(component templ.Component) echo.HandlerFunc {
 	templHandler := echo.WrapHandler(templ.Handler(component, templ.WithStreaming()))
 	return func(c echo.Context) error {
-		ctx, span := tracer.Start(c.Request().Context(), "page.render",
-			trace.WithSpanKind(trace.SpanKindServer),
-		)
+		ctx, span := tracer.Start(c.Request().Context(), "page.render")
 		defer span.End()
 
 		c.SetRequest(c.Request().WithContext(ctx))

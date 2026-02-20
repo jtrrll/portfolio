@@ -17,8 +17,6 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
 )
 
-// TODO: Go through this starter code and make sure it fits this use-case
-
 // setupOpenTelemetry bootstraps the OpenTelemetry pipeline.
 func setupOpenTelemetry(ctx context.Context) (func(context.Context) error, error) {
 	var shutdownFuncs []func(context.Context) error

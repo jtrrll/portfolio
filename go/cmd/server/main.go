@@ -17,6 +17,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/jtrrll/portfolio/internal/logging"
 	"github.com/jtrrll/portfolio/internal/server"
 	"github.com/urfave/cli/v3"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
@@ -33,7 +34,10 @@ func main() {
 			defer stop()
 
 			// Set up logger.
-			logger := slog.New(otelslog.NewHandler("portfolio"))
+			logger := slog.New(logging.NewFanoutHandler(
+				otelslog.NewHandler("portfolio"),
+				slog.NewTextHandler(os.Stdout, nil),
+			))
 			slog.SetDefault(logger)
 
 			// Set up OpenTelemetry.
@@ -52,7 +56,7 @@ func main() {
 			)
 			srvErr := make(chan error, 1)
 			go func() {
-				fmt.Printf("Starting server on port %d...\n", cmd.Uint("port"))
+				slog.InfoContext(ctx, "starting server", "port", cmd.Uint("port"))
 				srvErr <- srv.ListenAndServe()
 			}()
 
@@ -67,7 +71,7 @@ func main() {
 				stop()
 			}
 
-			fmt.Println("Shutting down gracefully...")
+			slog.InfoContext(ctx, "shutting down gracefully")
 			err = srv.Shutdown(context.Background())
 			return err
 		},
