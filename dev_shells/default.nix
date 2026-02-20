@@ -103,7 +103,29 @@
               pkgs.woff2
             ];
 
-            services.opentelemetry-collector.enable = true;
+            env.OTEL_EXPORTER_OTLP_INSECURE = "true";
+
+            services.opentelemetry-collector = {
+              enable = true;
+              settings = {
+                receivers.otlp.protocols.grpc.endpoint = "localhost:4317";
+                exporters.debug.verbosity = "detailed";
+                service.pipelines = {
+                  traces = {
+                    receivers = [ "otlp" ];
+                    exporters = [ "debug" ];
+                  };
+                  metrics = {
+                    receivers = [ "otlp" ];
+                    exporters = [ "debug" ];
+                  };
+                  logs = {
+                    receivers = [ "otlp" ];
+                    exporters = [ "debug" ];
+                  };
+                };
+              };
+            };
 
             git-hooks = {
               default_stages = [ "pre-push" ];
