@@ -5,7 +5,7 @@ go 1.25.5
 require (
 	github.com/a-h/templ v0.3.977
 	github.com/google/go-github/v76 v76.0.0
-	github.com/labstack/echo/v4 v4.15.0
+	github.com/labstack/echo/v4 v4.15.1
 	github.com/samber/slog-echo v1.21.0
 	github.com/urfave/cli/v3 v3.6.2
 	go.opentelemetry.io/contrib/bridges/otelslog v0.15.0
