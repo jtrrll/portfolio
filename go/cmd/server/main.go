@@ -16,19 +16,24 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/jtrrll/portfolio/internal/logging"
 	"github.com/jtrrll/portfolio/internal/server"
+	"github.com/jtrrll/portfolio/internal/services/software"
 	"github.com/urfave/cli/v3"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
 )
+
+var version = "0.0.0"
 
 // main serves a portfolio website.
 // Will exit with a non-zero status code upon failure.
 func main() {
 	cmd := &cli.Command{
-		Name:  "portfolio-server",
-		Usage: "Serve jtrrll's portfolio website",
+		Name:    "portfolio-server",
+		Usage:   "Serve jtrrll's portfolio website",
+		Version: version,
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 			defer stop()
@@ -47,6 +52,13 @@ func main() {
 			}
 			defer func() {
 				err = errors.Join(err, shutdownOpenTelemetry(context.Background()))
+			}()
+
+			// Start background data fetcher.
+			fetchDone := make(chan struct{})
+			go func() {
+				software.StartBackgroundRefresh(ctx, 1*time.Hour)
+				close(fetchDone)
 			}()
 
 			// Start HTTP server.
@@ -73,6 +85,7 @@ func main() {
 
 			slog.InfoContext(ctx, "shutting down gracefully")
 			err = srv.Shutdown(context.Background())
+			<-fetchDone
 			return err
 		},
 		Flags: []cli.Flag{
