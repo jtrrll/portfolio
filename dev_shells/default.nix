@@ -71,7 +71,7 @@
                     working-directory = "go";
                   };
                   commands = ''
-                    @templ generate --watch --proxy="http://localhost:8080" --cmd="go run -tags dev ./cmd/server"
+                    @templ generate --watch --cmd="go run -tags dev ./cmd/server"
                   '';
                   dependencies = [ "build-assets" ];
                 };

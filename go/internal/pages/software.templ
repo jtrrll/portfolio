@@ -3,42 +3,124 @@ package pages
 import "github.com/jtrrll/portfolio/internal/components"
 import "github.com/jtrrll/portfolio/internal/services/software"
 import "fmt"
+import "regexp"
+import "slices"
 import "strings"
 
 templ Software() {
 	@components.Layout("Software - Jackson Terrill", "Jackson Terrill's software projects") {
 		@components.Header("Software", "By Jackson Terrill")
 		{{
-			repos, err := software.GetAllRepositorySummaries(ctx)
-			if err != nil {
-				// TODO: Handle this
-			}
+			data := software.GetAllRepositorySummaries(ctx)
 		}}
-		@repositories(repos)
+		<div>
+			@templ.Flush() {
+				<template shadowrootmode="open">
+					<style>
+						.skeleton-grid {
+							display: grid;
+							gap: 0.5rem;
+							grid-auto-flow: row;
+							grid-template-columns: repeat(1, minmax(0, 1fr));
+							list-style: none;
+							padding: 0;
+							margin: 1rem 0;
+						}
+						@media (min-width: 40rem) {
+							.skeleton-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+						}
+						@media (min-width: 64rem) {
+							.skeleton-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+						}
+						.skeleton-card {
+							height: 20rem;
+							border: 2px solid color-mix(in srgb, #030202 10%, transparent);
+							background-color: color-mix(in srgb, #030202 5%, #f7f5f0);
+							animation: pulse 2s ease-in-out infinite;
+						}
+						@keyframes pulse {
+							0%, 100% { opacity: 1; }
+							50% { opacity: 0.4; }
+						}
+					</style>
+					<slot name="repos">
+						<ul class="skeleton-grid">
+							for range 9 {
+								<li><div class="skeleton-card"></div></li>
+							}
+						</ul>
+					</slot>
+				</template>
+			}
+			for repos := range data {
+				@templ.Flush() {
+					<ul slot="repos" class="grid">
+						for _, repo := range repos {
+							<li>
+								@repositoryCard(repo)
+							</li>
+						}
+					</ul>
+				}
+			}
+		</div>
 	}
 }
 
-templ repositories(repositories []software.RepositorySummary) {
-	<ul class="grid">
-		for _, repo := range repositories {
-			<li>
-				<a href={ fmt.Sprintf("/software/%s", repo.Name) } class="clickable" style="background-color: var(--color-light); border-width: 2px; display: inline-block; height: 100%; width: 100%;">
-					<div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-						<p style="background-color: var(--color-dark); color: var(--color-light); font-weight: 700; padding: 0 0.5rem;">
-							{ strings.ToLower(repo.Name) }
-						</p>
-					</div>
-					<div style="padding: 0.5rem;">
-						<img src={ repo.Thumbnail } alt={ repo.Name }/>
-					</div>
-					<p style="margin: 0.5rem;">
-						{ repo.Description }
-					</p>
-					<div style="padding: 0.5rem;">
-						TODO: Languages
-					</div>
-				</a>
-			</li>
+templ repositoryCard(repo software.RepositorySummary) {
+	<a href={ fmt.Sprintf("/software/%s", repo.Name) } class="clickable" style="background-color: var(--color-light); border-width: 2px; display: grid; grid-template-rows: auto auto 1fr auto auto; height: 100%; width: 100%;">
+		<div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+			<p style="background-color: var(--color-dark); color: var(--color-light); font-weight: 700; padding: 0 0.5rem;">
+				{ strings.ToLower(repo.Name) }
+			</p>
+		</div>
+		<div style="padding: 0.5rem;">
+			<img src={ repo.Thumbnail } alt={ repo.Name }/>
+		</div>
+		<p style="margin: 0.5rem;">
+			{ repo.Description }
+		</p>
+		<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem;">
+			for _, topic := range repo.Topics[:min(3, len(repo.Topics))] {
+				<span style="font-size: 0.875rem;">#{ topic }</span>
+			}
+		</div>
+		<div style="display: flex; gap: 0.75rem; padding: 0.5rem;">
+			for _, lang := range topLanguages(repo.Languages, 3) {
+				<span class={ languageClass(lang) } style="border-bottom-width: 2px; border-bottom-style: solid; font-size: 0.875rem;">
+					{ lang }
+				</span>
+			}
+		</div>
+	</a>
+}
+
+var nonAlphanumeric = regexp.MustCompile(`[^a-z0-9]+`)
+
+func languageClass(name string) string {
+	slug := nonAlphanumeric.ReplaceAllString(strings.ToLower(name), "-")
+	slug = strings.Trim(slug, "-")
+	return "language-" + slug
+}
+
+func topLanguages(languages map[string]int, n int) []string {
+	type entry struct {
+		name  string
+		bytes int
+	}
+	entries := make([]entry, 0, len(languages))
+	for name, bytes := range languages {
+		entries = append(entries, entry{name, bytes})
+	}
+	slices.SortFunc(entries, func(a, b entry) int {
+		return b.bytes - a.bytes
+	})
+	result := make([]string, 0, n)
+	for i, e := range entries {
+		if i >= n {
+			break
 		}
-	</ul>
+		result = append(result, e.name)
+	}
+	return result
 }

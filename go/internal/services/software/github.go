@@ -66,7 +66,7 @@ func GetThumbnailForRepository(ctx context.Context, owner string, repo string) (
 }
 
 func ListRepositoriesForUser(ctx context.Context, user string) ([]*github.Repository, error) {
-	repos, _, err := client.Repositories.ListByUser(ctx, user, &github.RepositoryListByUserOptions{Sort: "pushed"})
+	repos, _, err := client.Repositories.ListByUser(ctx, user, &github.RepositoryListByUserOptions{Sort: "pushed", Type: "sources"})
 	return repos, err
 }
 
